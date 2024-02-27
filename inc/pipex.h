@@ -28,7 +28,7 @@ void	parsing(int argc, char **argv, char **env, t_pipex *p);
 char	**paths(char **env);
 void    init_pipex(t_pipex *p, char **argv, char **env);
 
-char	*search_path(char *cmd, t_pipex *p);
+char	*check_path(char *cmd, t_pipex *p);
 void	clean_exit(t_pipex *p);
 void	free_the_tab(char **tab);
 

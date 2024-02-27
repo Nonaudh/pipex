@@ -16,12 +16,14 @@ void	free_the_tab(char **tab)
 
 void	clean_exit(t_pipex *p)
 {
+	//if (p->here_doc)
+		//unlink("here_doc.txt");
 	free_the_tab(p->cmd1);
 	free_the_tab(p->cmd2);
 	free_the_tab(p->paths);
 }
 
-char	*search_path(char *cmd, t_pipex *p)
+char	*check_path(char *cmd, t_pipex *p)
 {
 	int		i;
 	char	*full_path;
