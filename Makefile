@@ -1,12 +1,12 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -g #-Werror -Wextra
 
-SRC = src/pipex.c
+SRC = src/pipex.c src/utils.c src/parsing.c
 
 OBJ = $(SRC:%.c=%.o)
 
-INCLUDE = 
+INCLUDE = -Llib/libft -lft
 
 LIBFTDIR = lib/libft
 
