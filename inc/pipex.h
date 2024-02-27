@@ -21,7 +21,7 @@ typedef struct s_pipex
 typedef enum e_bool
 { 
     false,
-    true,
+    true
 }   t_bool;
 
 void	parsing(int argc, char **argv, char **env, t_pipex *p);
