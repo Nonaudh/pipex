@@ -18,9 +18,12 @@ void	clean_exit(t_pipex *p)
 {
 	if (p->here_doc)
 		unlink("here_doc.txt");
-	free_the_tab(p->cmd1);
-	free_the_tab(p->cmd2);
-	free_the_tab(p->paths);
+	if(p->cmd1)
+		free_the_tab(p->cmd1);
+	if(p->cmd2)
+		free_the_tab(p->cmd2);
+	if(p->paths)
+		free_the_tab(p->paths);
 }
 
 char	*check_path(char *cmd, t_pipex *p)

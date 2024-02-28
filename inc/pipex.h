@@ -24,9 +24,9 @@ typedef struct s_pipex
     char    **paths;
 }   t_pipex;
 
-void	parsing(int argc, char **argv, char **env, t_pipex *p);
+void	parsing(char **argv, char **env, t_pipex *p);
 char	**paths(char **env);
-void    init_pipex(t_pipex *p, char **argv, char **env);
+void    init_pipex(t_pipex *p, char **argv, int argc);
 
 char	*check_path(char *cmd, t_pipex *p);
 void	clean_exit(t_pipex *p);

@@ -12,7 +12,7 @@ char	**paths(char **env)
 	return (ft_split(env[i] + 5, ':'));
 }
 
-void	parsing(int argc, char **argv, char **env, t_pipex *p)
+void	parsing(char **argv, char **env, t_pipex *p)
 {
 	if (p->here_doc)
 	{
@@ -27,7 +27,7 @@ void	parsing(int argc, char **argv, char **env, t_pipex *p)
 	p->paths = paths(env);
 }
 
-int	write_here_doc(t_pipex *p, char **argv)
+int	write_here_doc(char **argv)
 {
 	char	*hd;
 	int		fd_hd;
@@ -47,19 +47,29 @@ int	write_here_doc(t_pipex *p, char **argv)
 	return(0);
 }
 
-void    init_pipex(t_pipex *p, char **argv, char **env)
+void    init_pipex(t_pipex *p, char **argv, int argc)
 {
+	if (argc < 5)
+		exit(EXIT_FAILURE);
 	if (!ft_strncmp(argv[1], "here_doc", 8))
 	{
 		p->here_doc = true;
-		write_here_doc(p, argv);
+		write_here_doc(argv);
 		p->fd_infile = open("here_doc.txt", O_RDONLY);
+		//if (p->fd_infile == -1)
+			//exit(EXIT_FAILURE);
 		p->fd_outfile = open(argv[5], O_RDWR | O_APPEND);
+		//if (p->fd_outfile == -1)
+			//exit(EXIT_FAILURE);
 	}
 	else
 	{
 		p->here_doc = false;
 		p->fd_infile = open(argv[1], O_RDONLY);
+		//if (p->fd_infile == -1)
+			//exit(EXIT_FAILURE);
 		p->fd_outfile = open(argv[4], O_RDWR | O_TRUNC);
+		//if (p->fd_outfile == -1)
+			//exit(EXIT_FAILURE);
 	}	
 }
