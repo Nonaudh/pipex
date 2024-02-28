@@ -7,8 +7,6 @@ char	**paths(char **env)
 	i = 0;
 	while (env[i] && !ft_strnstr(env[i], "PATH=", 5))
 		i++;
-	if (env[i] == NULL)
-		return (NULL);
 	return (ft_split(env[i] + 5, ':'));
 }
 
