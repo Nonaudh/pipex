@@ -14,8 +14,16 @@ char	**paths(char **env)
 
 void	parsing(int argc, char **argv, char **env, t_pipex *p)
 {
-	p->cmd1 = ft_split(argv[2], ' ');
-	p->cmd2 = ft_split(argv[3], ' ');
+	if (p->here_doc)
+	{
+		p->cmd1 = ft_split(argv[3], ' ');
+		p->cmd2 = ft_split(argv[4], ' ');
+	}
+	else
+	{
+		p->cmd1 = ft_split(argv[2], ' ');
+		p->cmd2 = ft_split(argv[3], ' ');
+	}
 	p->paths = paths(env);
 }
 
@@ -24,7 +32,7 @@ int	write_here_doc(t_pipex *p, char **argv)
 	char	*hd;
 	int		fd_hd;
 
-	fd_hd = open("here_doc.txt", O_RDWR, O_CREAT);
+	fd_hd = open("here_doc.txt", O_RDWR | O_TRUNC | O_CREAT, 0777);
 	ft_putstr_fd("pipe heredoc> ", 0);
 	hd = get_next_line(0);
 	while (!ft_strnstr(hd, argv[2], ft_strlen(argv[2])))
@@ -36,7 +44,7 @@ int	write_here_doc(t_pipex *p, char **argv)
 	}
 	free(hd);
 	close(fd_hd);
-	return(fd_hd);
+	return(0);
 }
 
 void    init_pipex(t_pipex *p, char **argv, char **env)
@@ -44,23 +52,14 @@ void    init_pipex(t_pipex *p, char **argv, char **env)
 	if (!ft_strncmp(argv[1], "here_doc", 8))
 	{
 		p->here_doc = true;
-		p->fd_infile = write_here_doc(p, argv);
-		p->fd_outfile = open(argv[5], O_WRONLY, O_APPEND);
-
-		/*pid = fork();
-		if (pid < 0)
-			exit(1);
-		if (pid == 0)
-			execve("/usr/bin/touch",
-				(char *[]){"touch", "here_doc.txt", NULL}, env);
-		wait(NULL);*/
-		
+		write_here_doc(p, argv);
+		p->fd_infile = open("here_doc.txt", O_RDONLY);
+		p->fd_outfile = open(argv[5], O_RDWR | O_APPEND);
 	}
 	else
 	{
 		p->here_doc = false;
 		p->fd_infile = open(argv[1], O_RDONLY);
-		p->fd_outfile = open(argv[4], O_WRONLY);
-	}
-		
+		p->fd_outfile = open(argv[4], O_RDWR | O_TRUNC);
+	}	
 }

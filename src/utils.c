@@ -16,8 +16,8 @@ void	free_the_tab(char **tab)
 
 void	clean_exit(t_pipex *p)
 {
-	//if (p->here_doc)
-		//unlink("here_doc.txt");
+	if (p->here_doc)
+		unlink("here_doc.txt");
 	free_the_tab(p->cmd1);
 	free_the_tab(p->cmd2);
 	free_the_tab(p->paths);
@@ -31,6 +31,7 @@ char	*check_path(char *cmd, t_pipex *p)
 
 	i = 0;
 	dir = ft_strjoin("/", cmd);
+	
 	while (p->paths[i])
 	{
 		full_path = ft_strjoin(p->paths[i], dir);
@@ -42,6 +43,8 @@ char	*check_path(char *cmd, t_pipex *p)
 		free(full_path);
 		i++;
 	}
+	ft_putstr_fd(cmd, 2);
+	ft_putendl_fd(": command not found", 2);
 	free(dir);
 	return(NULL);
 }
