@@ -1,6 +1,6 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 SRC = src/pipex.c src/utils.c src/parsing.c
 
