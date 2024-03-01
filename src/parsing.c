@@ -1,17 +1,10 @@
 #include "../inc/pipex.h"
 
-char	**paths(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] && !ft_strnstr(env[i], "PATH=", 5))
-		i++;
-	return (ft_split(env[i] + 5, ':'));
-}
-
 void	parsing(char **argv, char **env, t_pipex *p)
 {
+	char	**all_paths;
+
+	all_paths = paths(env);
 	if (p->here_doc)
 	{
 		p->cmd1 = ft_split(argv[3], ' ');
@@ -22,7 +15,17 @@ void	parsing(char **argv, char **env, t_pipex *p)
 		p->cmd1 = ft_split(argv[2], ' ');
 		p->cmd2 = ft_split(argv[3], ' ');
 	}
-	p->paths = paths(env);
+	if (p->fd_infile != -1 && p->fd_outfile != -1)
+	{
+		p->cmd1_path = check_path(p->cmd1[0], all_paths);
+		p->cmd2_path = check_path(p->cmd2[0], all_paths);
+	}
+	else
+	{
+		p->cmd1_path = NULL;
+		p->cmd2_path = NULL;
+	}
+	free_the_tab(all_paths);
 }
 
 int	write_here_doc(char **argv)
@@ -45,29 +48,40 @@ int	write_here_doc(char **argv)
 	return(0);
 }
 
-void    init_pipex(t_pipex *p, char **argv, int argc)
+void	open_here_doc(t_pipex *p, char **argv)
 {
-	if (argc < 5)
-		exit(EXIT_FAILURE);
-	if (!ft_strncmp(argv[1], "here_doc", 8))
+	p->fd_infile = open("here_doc.txt", O_RDONLY);
+	if (p->fd_infile == -1)
+		perror("here_doc.txt");
+	p->fd_outfile = open(argv[5], O_RDWR | O_APPEND);
+	if (p->fd_outfile == -1)
+		perror(argv[5]);
+}
+
+void	open_files(t_pipex *p, char **argv)
+{
+	p->fd_infile = open(argv[1], O_RDONLY);
+	if (p->fd_infile == -1)
+		perror(argv[1]);
+	p->fd_outfile = open(argv[4], O_RDWR | O_TRUNC);
+	if (p->fd_outfile == -1)
+		perror(argv[4]);
+}
+
+void    init_pipex(t_pipex *p, char **argv, int argc)
+{	
+	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
 	{
 		p->here_doc = true;
 		write_here_doc(argv);
-		p->fd_infile = open("here_doc.txt", O_RDONLY);
-		//if (p->fd_infile == -1)
-			//exit(EXIT_FAILURE);
-		p->fd_outfile = open(argv[5], O_RDWR | O_APPEND);
-		//if (p->fd_outfile == -1)
-			//exit(EXIT_FAILURE);
+		open_here_doc(p, argv);
+		return ;
 	}
-	else
+	if (argc == 5)
 	{
 		p->here_doc = false;
-		p->fd_infile = open(argv[1], O_RDONLY);
-		//if (p->fd_infile == -1)
-			//exit(EXIT_FAILURE);
-		p->fd_outfile = open(argv[4], O_RDWR | O_TRUNC);
-		//if (p->fd_outfile == -1)
-			//exit(EXIT_FAILURE);
-	}	
+		open_files(p, argv);
+		return ;
+	}
+	error_argument();
 }

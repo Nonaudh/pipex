@@ -2,26 +2,18 @@
 
 void	execute(t_pipex *p, char **env, int *pfd)//, int pfd2)
 {
-	char	*path;
-
 	close(pfd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
 	dup2(pfd[1], STDOUT_FILENO);
-	path = check_path(p->cmd1[0], p);
-	if (path)
-		execve(path, p->cmd1, env);
+	execve(p->cmd1_path, p->cmd1, env);
 }
 
 void	execute2(t_pipex *p, char **env, int pfd, int pfd2)
 {
-	char	*path;
-
 	close(pfd2);
 	dup2(pfd, STDIN_FILENO);
 	dup2(p->fd_outfile, STDOUT_FILENO);
-	path = check_path(p->cmd2[0], p);
-	if (path)
-		execve(check_path(p->cmd2[0], p), p->cmd2, env);
+	execve(p->cmd2_path, p->cmd2, env);
 }
 
 void	executes_program(t_pipex *p, char **env)
@@ -54,7 +46,8 @@ int	main (int argc, char **argv, char **env)
 
 	init_pipex(&pipex, argv, argc);
 	parsing(argv, env, &pipex);
-	executes_program(&pipex, env);
+	if (pipex.cmd1_path && pipex.cmd2_path && pipex.fd_infile != -1 && pipex.fd_outfile != -1)
+		executes_program(&pipex, env);
 	clean_exit(&pipex);
 	return (0);
 }

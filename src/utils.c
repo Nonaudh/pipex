@@ -22,11 +22,13 @@ void	clean_exit(t_pipex *p)
 		free_the_tab(p->cmd1);
 	if(p->cmd2)
 		free_the_tab(p->cmd2);
-	if(p->paths)
-		free_the_tab(p->paths);
+	if(p->cmd1_path)
+		free(p->cmd1_path);
+	if(p->cmd2_path)
+		free(p->cmd2_path);
 }
 
-char	*check_path(char *cmd, t_pipex *p)
+char	*check_path(char *cmd, char **paths)
 {
 	int		i;
 	char	*full_path;
@@ -35,9 +37,9 @@ char	*check_path(char *cmd, t_pipex *p)
 	i = 0;
 	dir = ft_strjoin("/", cmd);
 	
-	while (p->paths[i])
+	while (paths[i])
 	{
-		full_path = ft_strjoin(p->paths[i], dir);
+		full_path = ft_strjoin(paths[i], dir);
 		if(!access(full_path, X_OK))
 		{
 			free(dir);
@@ -50,4 +52,23 @@ char	*check_path(char *cmd, t_pipex *p)
 	ft_putendl_fd(": command not found", 2);
 	free(dir);
 	return(NULL);
+}
+
+char	**paths(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] && !ft_strnstr(env[i], "PATH=", 5))
+		i++;
+	return (ft_split(env[i] + 5, ':'));
+}
+
+void	error_argument(void)
+{
+	ft_putendl_fd("Error\n", 2);
+	ft_putendl_fd("Arguments available\n", 2);
+	ft_putendl_fd("\t./pipex infile cmd cmd1 outfile", 2);
+	ft_putendl_fd("\t./pipex here_doc LIMITER cmd cmd1 outfile", 2);
+	exit(EXIT_FAILURE);
 }
