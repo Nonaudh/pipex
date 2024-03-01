@@ -36,7 +36,7 @@ void	executes_program(t_pipex *p, char **env)
 	}
 	close(pfd[0]);
 	close(pfd[1]);
-	waitpid(pid[0], NULL, 0);
+	//waitpid(pid[0], NULL, 0);
 	waitpid(pid[1], NULL, 0);
 }
 
