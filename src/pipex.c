@@ -32,7 +32,7 @@ void	executes_program(t_pipex *p, char **env)
 		if ((pid[1] = fork()) < 0)
 			exit(EXIT_FAILURE);
 		if (pid[1] == 0)
-			execute2(p, env, pfd[0], pfd[1]);
+			execute2(p, env, pfd[0], pfd[1]); /// <-
 	}
 	close(pfd[0]);
 	close(pfd[1]);
@@ -47,7 +47,7 @@ int	main (int argc, char **argv, char **env)
 	init_pipex(&pipex, argv, argc);
 	parsing(argv, env, &pipex);
 	if (pipex.cmd1_path && pipex.cmd2_path && pipex.fd_infile != -1 && pipex.fd_outfile != -1)
-		executes_program(&pipex, env);
+		executes_program(&pipex, env); //all_is_ok();
 	clean_exit(&pipex);
 	return (0);
 }

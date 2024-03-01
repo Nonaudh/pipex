@@ -19,6 +19,7 @@ void	parsing(char **argv, char **env, t_pipex *p)
 	{
 		p->cmd1_path = check_path(p->cmd1[0], all_paths);
 		p->cmd2_path = check_path(p->cmd2[0], all_paths);
+		//exit code (127);
 	}
 	else
 	{
