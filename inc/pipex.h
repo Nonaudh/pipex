@@ -27,13 +27,15 @@ typedef struct s_pipex
     char    *cmd2_path;
 }   t_pipex;
 
-void	parsing(char **argv, char **env, t_pipex *p);
+void	parsing(t_pipex *p, char **env, char *infile, char *outfile);
 char	**paths(char **env);
-void    init_pipex(t_pipex *p, char **argv, int argc);
+void    init_pipex(t_pipex *p, int argc, char **argv, char **env);
 
 char	*check_path(char *cmd, char **paths);
 void	clean_exit(t_pipex *p);
 void	free_the_tab(char **tab);
 void	error_argument(void);
+
+t_bool   init_bonus(t_pipex *p, int argc, char **argv, char **env);
 
 #endif

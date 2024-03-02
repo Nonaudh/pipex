@@ -35,6 +35,8 @@ char	*check_path(char *cmd, char **paths)
 	char	*dir;
 
 	i = 0;
+	if (!cmd)
+		return (NULL);
 	dir = ft_strjoin("/", cmd);
 	
 	while (paths[i])
@@ -51,7 +53,7 @@ char	*check_path(char *cmd, char **paths)
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd(": command not found", 2);
 	free(dir);
-	return(NULL);
+	return (NULL);
 }
 
 char	**paths(char **env)

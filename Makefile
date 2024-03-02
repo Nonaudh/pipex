@@ -2,7 +2,7 @@ CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g
 
-SRC = src/pipex.c src/utils.c src/parsing.c
+SRC = src/pipex.c src/utils.c src/parsing.c src/parsing_bonus.c 
 
 OBJ = $(SRC:%.c=%.o)
 
