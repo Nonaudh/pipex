@@ -20,7 +20,7 @@ void	check_in(t_pipex_bonus *p_b, char **argv, char **all_paths)
 	if (access(argv[1], R_OK))
 	{
 		perror(argv[1]);
-		p_b->fd_infile == -1;
+		p_b->fd_infile = -1;
 		p_b->cmd_path[0] = NULL;
 	}
 	else
@@ -62,6 +62,7 @@ void	init_multi_pipe(int argc, char **argv, char **env)
 	check_in(&p_b, argv, all_paths);
 	check_all_command(&p_b, all_paths);
 	check_out(&p_b, argc, argv);
+	multi_pipe(&p_b, env);
 	ft_putendl_fd("SUCCESS", 2);
 	exit(EXIT_SUCCESS);
 }
