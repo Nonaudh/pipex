@@ -5,7 +5,7 @@ int	write_here_doc(char **argv)
 	char	*hd;
 	int		fd_hd;
 
-	fd_hd = open("here_doc.txt", O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_hd = open("here_doc.txt", O_RDWR | O_TRUNC | O_CREAT, 0666);
 	ft_putstr_fd("pipe heredoc> ", 0);
 	hd = get_next_line(0);
 	while (!ft_strnstr(hd, argv[2], ft_strlen(argv[2])))

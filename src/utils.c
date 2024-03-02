@@ -26,6 +26,10 @@ void	clean_exit(t_pipex *p)
 		free(p->cmd1_path);
 	if(p->cmd2_path)
 		free(p->cmd2_path);
+	if (p->fd_infile != -1)
+		close(p->fd_infile);
+	if (p->fd_outfile != -1)
+		close(p->fd_outfile);
 }
 
 char	*check_path(char *cmd, char **paths)

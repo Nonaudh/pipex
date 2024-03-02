@@ -25,13 +25,13 @@ void	executes_program(t_pipex *p, char **env)
 		exit(EXIT_FAILURE);
 	if ((pid[0] = fork()) < 0)
 		exit(EXIT_FAILURE);
-	if (pid[0] == 0)// && p->fd_infile != -1)
-		execute(p, env, pfd);//, pfd[1]);
+	if (pid[0] == 0)
+		return (execute(p, env, pfd));
 	else
 	{
 		if ((pid[1] = fork()) < 0)
 			exit(EXIT_FAILURE);
-		if (pid[1] == 0)// && p->fd_outfile != -1)
+		if (pid[1] == 0)
 			execute2(p, env, pfd[0], pfd[1]); /// <-
 	}
 	close(pfd[0]);
