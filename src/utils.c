@@ -75,6 +75,6 @@ void	error_argument(void)
 	ft_putendl_fd("Error\n", 2);
 	ft_putendl_fd("Arguments available\n", 2);
 	ft_putendl_fd("\t./pipex infile cmd cmd1 outfile", 2);
-	ft_putendl_fd("\t./pipex here_doc LIMITER cmd cmd1 outfile", 2);
+	ft_putendl_fd("\t./pipex here_doc LIMITER cmd cmd1 outfile\n", 2);
 	exit(EXIT_FAILURE);
 }

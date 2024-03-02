@@ -1,6 +1,6 @@
 #include "../inc/pipex.h"
 
-void	execute(t_pipex *p, char **env, int *pfd)//, int pfd2)
+void	execute(t_pipex *p, char **env, int *pfd)
 {
 	close(pfd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
@@ -8,10 +8,10 @@ void	execute(t_pipex *p, char **env, int *pfd)//, int pfd2)
 	execve(p->cmd1_path, p->cmd1, env);
 }
 
-void	execute2(t_pipex *p, char **env, int pfd, int pfd2)
+void	execute2(t_pipex *p, char **env, int *pfd)
 {
-	close(pfd2);
-	dup2(pfd, STDIN_FILENO);
+	close(pfd[1]);
+	dup2(pfd[0], STDIN_FILENO);
 	dup2(p->fd_outfile, STDOUT_FILENO);
 	execve(p->cmd2_path, p->cmd2, env);
 }
@@ -26,13 +26,13 @@ void	executes_program(t_pipex *p, char **env)
 	if ((pid[0] = fork()) < 0)
 		exit(EXIT_FAILURE);
 	if (pid[0] == 0)
-		return (execute(p, env, pfd));
+		execute(p, env, pfd);
 	else
 	{
 		if ((pid[1] = fork()) < 0)
 			exit(EXIT_FAILURE);
 		if (pid[1] == 0)
-			execute2(p, env, pfd[0], pfd[1]); /// <-
+			execute2(p, env, pfd);
 	}
 	close(pfd[0]);
 	close(pfd[1]);

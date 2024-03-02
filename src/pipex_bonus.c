@@ -1,4 +1,4 @@
-#include "../inc/pipex.h"
+#include "../inc/pipex_bonus.h"
 
 int	write_here_doc(char **argv)
 {
@@ -22,6 +22,7 @@ int	write_here_doc(char **argv)
 
 t_bool   init_bonus(t_pipex *p, int argc, char **argv, char **env)
 {
+
 	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
 	{
 		p->here_doc = true;
@@ -31,5 +32,11 @@ t_bool   init_bonus(t_pipex *p, int argc, char **argv, char **env)
 		parsing(p, env, "here_doc.txt", argv[5]);
 		return (true);
 	}
+	else
+	{
+		init_multi_pipe(argc, argv, env);
+		return (true);
+	}
+
 	return(false);
 }
