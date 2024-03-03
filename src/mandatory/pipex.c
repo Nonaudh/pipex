@@ -1,4 +1,4 @@
-#include "../inc/pipex.h"
+#include "../../inc/pipex.h"
 
 void	execute(t_pipex *p, char **env, int *pfd)
 {

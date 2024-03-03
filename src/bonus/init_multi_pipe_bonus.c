@@ -1,4 +1,4 @@
-#include "../inc/pipex_bonus.h"
+#include "../../inc/pipex_bonus.h"
 
 void	init_cmds(t_pipex_bonus *p_b, int argc, char **argv)
 {
@@ -40,6 +40,7 @@ void	check_all_command(t_pipex_bonus *p_b, char **all_paths)
 	while (p_b->cmd[i])
 	{
 		p_b->cmd_path[i] = check_path(p_b->cmd[i][0], all_paths);
+		ft_printf("pth; %s\n", p_b->cmd_path[i]);
 		i++;
 	}
 	p_b->cmd_path[i] = NULL;
@@ -80,9 +81,9 @@ void	init_multi_pipe(int argc, char **argv, char **env)
 	init_cmds(&p_b, argc, argv);
 	check_in(&p_b, argv, all_paths);
 	check_all_command(&p_b, all_paths);
+	free_the_tab(all_paths);
 	check_out(&p_b, argc, argv);
 	multi_pipe(&p_b, argc, env);
-	free_the_tab(all_paths);
 	multi_clean_exit(&p_b);
 	ft_putendl_fd("SUCCESS", 2);
 	exit(EXIT_SUCCESS);

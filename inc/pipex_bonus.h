@@ -17,4 +17,6 @@ void    init_multi_pipe(int argc, char **argv, char **env);
 
 void    multi_pipe(t_pipex_bonus *p_b, int argc, char **env);
 
+void	multi_clean_exit(t_pipex_bonus *p_b);
+
 #endif

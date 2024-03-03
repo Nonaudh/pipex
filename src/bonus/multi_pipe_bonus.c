@@ -1,4 +1,4 @@
-#include "../inc/pipex_bonus.h"
+#include "../../inc/pipex_bonus.h"
 
 void	init_pipe_fd(t_pipex_bonus *p_b, int argc)
 {
@@ -107,6 +107,9 @@ void    multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 		{
 			if (p_b->cmd_path[i])
 				execute_command(p_b, argc, env, i);
+			multi_clean_exit(p_b);
+			free(p_b->fork_pid);
+			free_the_pipe(p_b, argc);
 			exit(EXIT_FAILURE);
 		}
 		else

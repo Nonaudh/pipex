@@ -1,4 +1,4 @@
-#include "../inc/pipex_bonus.h"
+#include "../../inc/pipex_bonus.h"
 
 int	write_here_doc(char **argv)
 {

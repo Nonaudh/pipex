@@ -1,4 +1,4 @@
-#include "../inc/pipex.h"
+#include "../../inc/pipex.h"
 
 void	parsing_in(t_pipex *p, char *infile, char **all_paths)
 {
