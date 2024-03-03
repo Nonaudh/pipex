@@ -34,6 +34,7 @@ t_bool   init_bonus(t_pipex *p, int argc, char **argv, char **env)
 	}
 	else
 	{
+		p->here_doc = false;
 		init_multi_pipe(argc, argv, env);
 		return (true);
 	}

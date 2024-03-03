@@ -52,6 +52,25 @@ void	check_out(t_pipex_bonus *p_b, int argc, char **argv)
 			perror(argv[argc - 1]);
 }
 
+void	multi_clean_exit(t_pipex_bonus *p_b)
+{
+	int	i;
+
+	i = 0;
+	while (p_b->cmd[i])
+	{
+		free_the_tab(p_b->cmd[i]);
+		i++;
+	}
+	free(p_b->cmd);
+	if(p_b->cmd_path)
+		free_the_tab(p_b->cmd_path);
+	if (p_b->fd_infile != -1)
+		close(p_b->fd_infile);
+	if (p_b->fd_outfile != -1)
+		close(p_b->fd_outfile);
+}
+
 void	init_multi_pipe(int argc, char **argv, char **env)
 {
 	t_pipex_bonus	p_b;
@@ -62,7 +81,9 @@ void	init_multi_pipe(int argc, char **argv, char **env)
 	check_in(&p_b, argv, all_paths);
 	check_all_command(&p_b, all_paths);
 	check_out(&p_b, argc, argv);
-	multi_pipe(&p_b, env);
+	multi_pipe(&p_b, argc, env);
+	free_the_tab(all_paths);
+	multi_clean_exit(&p_b);
 	ft_putendl_fd("SUCCESS", 2);
 	exit(EXIT_SUCCESS);
 }

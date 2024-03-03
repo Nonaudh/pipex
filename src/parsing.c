@@ -55,6 +55,8 @@ void    init_pipex(t_pipex *p, int argc, char **argv, char **env)
 		parsing(p, env, argv[1], argv[4]);
 		return ;
 	}
-	else if (argc < 5 || !init_bonus(p, argc, argv, env))
+	if (argc > 5)
+		init_bonus(p, argc, argv, env);
+	else
 		error_argument();
 }
