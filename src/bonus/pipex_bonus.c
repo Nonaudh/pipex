@@ -37,6 +37,7 @@ void	init_bonus(t_pipex *p, int argc, char **argv, char **env)
 	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
 	{
 		p->here_doc = true;
+		p->status_code = 0;
 		write_here_doc(argv);
 		p->cmd1 = ft_split(argv[3], ' ');
 		p->cmd2 = ft_split(argv[4], ' ');
