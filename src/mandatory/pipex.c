@@ -61,5 +61,5 @@ int	main(int argc, char **argv, char **env)
 	if (!pipex.status_code && pipex.fd_infile != -1)
 		executes_program(&pipex, env);
 	clean_exit(&pipex);
-	return (0);
+	return (pipex.status_code);
 }

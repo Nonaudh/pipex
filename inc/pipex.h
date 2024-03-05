@@ -6,7 +6,7 @@
 /*   By: ahuge <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 15:09:10 by ahuge             #+#    #+#             */
-/*   Updated: 2024/03/05 15:09:13 by ahuge            ###   ########.fr       */
+/*   Updated: 2024/03/05 16:20:07 by ahuge            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,20 @@ typedef struct s_pipex
 
 }	t_pipex;
 
-void	parsing(t_pipex *p, char **env, char *infile, char *outfile);
-char	**paths(char **env);
 void	init_pipex(t_pipex *p, int argc, char **argv, char **env);
+void	parsing(t_pipex *p, char **env, char *infile, char *outfile);
+void	parsing_out(t_pipex *p, char *outfile, char **all_paths);
+void	parsing_in(t_pipex *p, char *infile, char **all_paths);
 
+void	executes_program(t_pipex *p, char **env);
+void	execute2(t_pipex *p, char **env, int *pfd);
+void	execute(t_pipex *p, char **env, int *pfd);
+
+void	error_argument(void);
+char	**paths(char **env);
 char	*check_path(char *cmd, char **paths);
 void	clean_exit(t_pipex *p);
 void	free_the_tab(char **tab);
-void	error_argument(void);
 
 void	init_bonus(t_pipex *p, int argc, char **argv, char **env);
 

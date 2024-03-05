@@ -77,6 +77,8 @@ void	init_multi_pipe(int argc, char **argv, char **env)
 
 	p_b.status_code = 0;
 	all_paths = paths(env);
+	if (!all_paths)
+		exit (-1);
 	init_cmds(&p_b, argc, argv);
 	check_in(&p_b, argv, all_paths);
 	check_out(&p_b, argc, argv, all_paths);
@@ -84,6 +86,5 @@ void	init_multi_pipe(int argc, char **argv, char **env)
 	if (!p_b.status_code && p_b.fd_infile != -1)
 		multi_pipe(&p_b, argc, env);
 	multi_clean_exit(&p_b, argc);
-	ft_putendl_fd("SUCCESS", 2);
 	exit(p_b.status_code);
 }
