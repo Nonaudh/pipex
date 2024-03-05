@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahuge <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/05 15:11:29 by ahuge             #+#    #+#             */
+/*   Updated: 2024/03/05 15:11:44 by ahuge            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/pipex.h"
 
 void	free_the_tab(char **tab)
@@ -18,13 +30,13 @@ void	clean_exit(t_pipex *p)
 {
 	if (p->here_doc)
 		unlink("here_doc.txt");
-	if(p->cmd1)
+	if (p->cmd1)
 		free_the_tab(p->cmd1);
-	if(p->cmd2)
+	if (p->cmd2)
 		free_the_tab(p->cmd2);
-	if(p->cmd1_path)
+	if (p->cmd1_path)
 		free(p->cmd1_path);
-	if(p->cmd2_path)
+	if (p->cmd2_path)
 		free(p->cmd2_path);
 	if (p->fd_infile != -1)
 		close(p->fd_infile);
@@ -42,11 +54,10 @@ char	*check_path(char *cmd, char **paths)
 	if (!cmd)
 		return (NULL);
 	dir = ft_strjoin("/", cmd);
-	
 	while (paths[i])
 	{
 		full_path = ft_strjoin(paths[i], dir);
-		if(!access(full_path, X_OK))
+		if (!access(full_path, X_OK))
 		{
 			free(dir);
 			return (full_path);

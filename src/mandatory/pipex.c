@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahuge <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/05 15:11:22 by ahuge             #+#    #+#             */
+/*   Updated: 2024/03/05 15:11:25 by ahuge            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/pipex.h"
 
 void	execute(t_pipex *p, char **env, int *pfd)
@@ -23,13 +35,15 @@ void	executes_program(t_pipex *p, char **env)
 
 	if (pipe(pfd))
 		exit(EXIT_FAILURE);
-	if ((pid[0] = fork()) < 0)
+	pid[0] = fork();
+	if (pid[0] < 0)
 		exit(EXIT_FAILURE);
 	if (pid[0] == 0)
 		execute(p, env, pfd);
 	else
 	{
-		if ((pid[1] = fork()) < 0)
+		pid[1] = fork();
+		if (pid[1] < 0)
 			exit(EXIT_FAILURE);
 		if (pid[1] == 0)
 			execute2(p, env, pfd);
@@ -39,12 +53,13 @@ void	executes_program(t_pipex *p, char **env)
 	waitpid(pid[1], NULL, 0);
 }
 
-int	main (int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
 	init_pipex(&pipex, argc, argv, env);
-	executes_program(&pipex, env);
+	if (!pipex.status_code && pipex.fd_infile != -1)
+		executes_program(&pipex, env);
 	clean_exit(&pipex);
 	return (0);
 }
