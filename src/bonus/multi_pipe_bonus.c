@@ -20,7 +20,7 @@ void	first_command(t_pipex_bonus *p_b, int argc, char **env)
 	execve(p_b->cmd_path[0], p_b->cmd[0], env);
 }
 
-void	next_command(t_pipex_bonus *p_b, int argc, char **env, int i)
+void	middle_command(t_pipex_bonus *p_b, int argc, char **env, int i)
 {
 	close_all_except(p_b, p_b->p_fd[i - 1][0], p_b->p_fd[i][1], argc);
 	dup2(p_b->p_fd[i - 1][0], STDIN_FILENO);
@@ -41,7 +41,7 @@ void	execute_command(t_pipex_bonus *p_b, int argc, char **env, int i)
 	if (i == 0)
 		first_command(p_b, argc, env);
 	else if (i != argc - 4)
-		next_command(p_b, argc, env, i);
+		middle_command(p_b, argc, env, i);
 	if (i == argc - 4)
 		last_command(p_b, argc, env, i);
 }

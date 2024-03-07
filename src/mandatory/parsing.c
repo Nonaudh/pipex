@@ -24,7 +24,7 @@ void	parsing_in(t_pipex *p, char *infile, char **all_paths)
 		p->fd_infile = open(infile, O_RDONLY);
 		if (p->fd_infile == -1)
 			perror(infile);
-		p->cmd1_path = check_path(p->cmd1[0], all_paths);
+		p->cmd1_path = find_command_path(p->cmd1[0], all_paths);
 		if (!p->cmd1_path)
 			p->status_code = 127;
 	}
@@ -32,7 +32,7 @@ void	parsing_in(t_pipex *p, char *infile, char **all_paths)
 
 void	parsing_out(t_pipex *p, char *outfile, char **all_paths)
 {
-	p->cmd2_path = check_path(p->cmd2[0], all_paths);
+	p->cmd2_path = find_command_path(p->cmd2[0], all_paths);
 	if (!p->cmd2_path)
 		p->status_code = 127;
 	if (p->here_doc)

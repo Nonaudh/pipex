@@ -34,7 +34,7 @@ void	init_cmds(t_pipex_bonus *p_b, int argc, char **argv);
 void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env);
 void	execute_command(t_pipex_bonus *p_b, int argc, char **env, int i);
 void	last_command(t_pipex_bonus *p_b, int argc, char **env, int i);
-void	next_command(t_pipex_bonus *p_b, int argc, char **env, int i);
+void	middle_command(t_pipex_bonus *p_b, int argc, char **env, int i);
 void	first_command(t_pipex_bonus *p_b, int argc, char **env);
 
 void	init_bonus(t_pipex *p, int argc, char **argv, char **env);

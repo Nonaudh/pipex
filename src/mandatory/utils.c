@@ -44,7 +44,7 @@ void	clean_exit(t_pipex *p)
 		close(p->fd_outfile);
 }
 
-char	*check_path(char *cmd, char **paths)
+char	*find_command_path(char *cmd, char **paths)
 {
 	int		i;
 	char	*full_path;
@@ -86,6 +86,7 @@ void	error_argument(void)
 	ft_putendl_fd("Error\n", 2);
 	ft_putendl_fd("Arguments available\n", 2);
 	ft_putendl_fd("\t./pipex infile cmd cmd1 outfile", 2);
+	ft_putendl_fd("\t./pipex infile cmd cmd1 cmd2 ... cmdn outfile\n", 2);
 	ft_putendl_fd("\t./pipex here_doc LIMITER cmd cmd1 outfile\n", 2);
 	exit(EXIT_FAILURE);
 }

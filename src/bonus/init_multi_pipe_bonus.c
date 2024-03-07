@@ -46,7 +46,7 @@ void	check_in(t_pipex_bonus *p_b, char **argv, char **all_paths)
 		p_b->fd_infile = open(argv[1], O_RDONLY);
 		if (p_b->fd_infile == -1)
 			perror(argv[1]);
-		p_b->cmd_path[0] = check_path(p_b->cmd[0][0], all_paths);
+		p_b->cmd_path[0] = find_command_path(p_b->cmd[0][0], all_paths);
 		if (!p_b->cmd_path[0])
 			p_b->status_code = 127;
 	}
@@ -59,7 +59,7 @@ void	check_out(t_pipex_bonus *p_b, int argc, char **argv, char **all_paths)
 	i = 1;
 	while (p_b->cmd[i])
 	{
-		p_b->cmd_path[i] = check_path(p_b->cmd[i][0], all_paths);
+		p_b->cmd_path[i] = find_command_path(p_b->cmd[i][0], all_paths);
 		if (!p_b->cmd_path[i])
 			p_b->status_code = 127;
 		i++;
