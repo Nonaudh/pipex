@@ -51,6 +51,9 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 	int	i;
 
 	i = 0;
+	p_b->fork_pid = malloc(sizeof(int) * (argc - 3));
+	if (!p_b->fork_pid)
+		exit(-1);
 	init_pipe_fd(p_b, argc);
 	while (i < (argc - 3))
 	{

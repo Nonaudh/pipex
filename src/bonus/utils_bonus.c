@@ -78,7 +78,6 @@ void	init_pipe_fd(t_pipex_bonus *p_b, int argc)
 
 	pipe_number = argc - 4;
 	i = 0;
-	p_b->fork_pid = malloc(sizeof(int) * (argc - 3));
 	p_b->p_fd = malloc(sizeof(int *) * (pipe_number));
 	if (!p_b->p_fd)
 		exit(EXIT_FAILURE);
