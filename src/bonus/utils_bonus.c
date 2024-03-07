@@ -88,7 +88,7 @@ void	init_pipe_fd(t_pipex_bonus *p_b, int argc)
 			exit(EXIT_FAILURE);
 		if (pipe(p_b->p_fd[i]))
 		{
-			close_all_except(p_b, -1, -1, i);
+			close_all_except(p_b, -1, -1, i + 3);
 			multi_clean_exit(p_b, argc);
 			exit(EXIT_FAILURE);
 		}
