@@ -50,7 +50,7 @@ void	free_the_pipe(t_pipex_bonus *p_b, int argc)
 	i = 0;
 	while (i < pipe_number)
 	{
-		free(p_b->p_fd[i]);
+			free(p_b->p_fd[i]);
 		i++;
 	}
 	free(p_b->p_fd);
