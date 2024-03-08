@@ -42,7 +42,7 @@ void	parsing_out(t_pipex *p, char *outfile, char **all_paths)
 		{
 			perror(outfile);
 			exit(-1);
-		}	
+		}
 	}
 	else
 	{
