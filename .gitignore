@@ -1,3 +1,4 @@
 *.o
 *.a
+/pipex_save
 pipex
