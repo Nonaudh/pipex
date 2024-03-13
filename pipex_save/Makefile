@@ -2,8 +2,8 @@ CC = cc
 
 CFLAGS = -g -Wall -Wextra -Werror 
 
-SRC = 	src/mandatory/pipex.c src/mandatory/utils.c src/mandatory/parsing.c \
-		#src/bonus/init_multi_pipe_bonus.c src/bonus/pipex_bonus.c \
+SRC = 	src/mandatory/pipex.c src/mandatory/utils.c src/mandatory/parsing.c
+		src/bonus/init_multi_pipe_bonus.c src/bonus/pipex_bonus.c \
 		src/bonus/multi_pipe_bonus.c src/bonus/utils_bonus.c
 		
 OBJ = $(SRC:%.c=%.o)

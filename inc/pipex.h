@@ -44,7 +44,13 @@ void	simple_pipe(int argc, char **argv, char **env);
 
 
 
-void	init_pipex(t_pipex *p, int argc, char **argv, char **env);
+void	init_pipex(t_pipex *p, char **argv, char **env);
+
+void	open_files(t_pipex *p, char **argv);
+
+void	check_env(char **env);
+
+
 void	parsing(t_pipex *p, char **env, char *infile, char *outfile);
 void	parsing_out(t_pipex *p, char *outfile, char **all_paths);
 void	parsing_in(t_pipex *p, char *infile, char **all_paths);
@@ -56,7 +62,6 @@ void	command_in(t_pipex *p, char **env, int *pfd);
 void	error_argument(void);
 char	**paths(char **env);
 char	*find_command_path(char *cmd, char **paths);
-void	clean_exit(t_pipex *p);
 void	free_the_tab(char **tab);
 
 #endif

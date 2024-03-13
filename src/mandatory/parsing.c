@@ -13,24 +13,16 @@
 #include "../../inc/pipex.h"
 
 
-void	open_files(t_pipex *p, char **argv)
+void	init_pipex(t_pipex *p, char **argv, char **env)
 {
-	if (access(argv[1], R_OK))
+	p->status_code = 0;
+	p->cmd1 = argv[2];
+	p->cmd2 = argv[3];
+	p->all_paths = paths(env);
+	if (!p->all_paths)
 	{
-		perror(argv[1]);
-		p->fd_infile = -1;
-	}
-	else
-	{
-		p->fd_infile = open(argv[1], O_RDONLY);
-		if (!p->fd_infile)
-			exit(-1);
-	}
-	p->fd_outfile = open(argv[4], O_RDWR | O_TRUNC | O_CREAT, 0666);
-	if (p->fd_outfile == -1)
-	{
-		perror(argv[4]);
-		exit(-1);
+		ft_putendl_fd("PATHS not found", 2);
+		exit(1);
 	}
 }
 
@@ -39,11 +31,8 @@ void	simple_pipe(int argc, char **argv, char **env)
 	t_pipex p;
 	(void)argc;
 
-	p.status_code = 0;
-	p.cmd1 = argv[2];
-	p.cmd2 = argv[3];
-	p.all_paths = paths(env);
 	open_files(&p, argv);
+	init_pipex(&p, argv, env);
 	execute_programs(&p, env);
 	free_the_tab(p.all_paths);
 	close(p.fd_infile);

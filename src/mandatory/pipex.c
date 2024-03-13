@@ -24,9 +24,13 @@ void	command_in(t_pipex *p, char **env, int *pfd)
 	close(pfd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
 	dup2(pfd[1], STDOUT_FILENO);
+	//close(p->fd_infile);
+	//close(pfd[1]);
 	if (cmd_path)
 		execve(cmd_path, cmd, env);
-	else
+	free_the_tab(cmd);
+	free(cmd_path);
+	free_the_tab(p->all_paths);
 		exit(127);
 }
 
@@ -42,9 +46,13 @@ void	command_out(t_pipex *p, char **env, int *pfd)
 	close(pfd[1]);
 	dup2(pfd[0], STDIN_FILENO);
 	dup2(p->fd_outfile, STDOUT_FILENO);
+	//close(p->fd_outfile);
+	//close(pfd[0]);
 	if (cmd_path)
 		execve(cmd_path, cmd, env);
-	else
+	free_the_tab(cmd);
+	free(cmd_path);
+	free_the_tab(p->all_paths);
 		exit(127);
 }
 
@@ -75,11 +83,12 @@ void	execute_programs(t_pipex *p, char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-
+	check_env(env);
 	if (argc == 5)
 		simple_pipe(argc, argv, env);
 	/*if (!pipex.status_code && pipex.fd_infile != -1)
 		execute_programs(&pipex, env);
 	clean_exit(&pipex);*/
+	error_argument();
 	return (0);
 }

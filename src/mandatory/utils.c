@@ -60,7 +60,18 @@ char	**paths(char **env)
 	i = 0;
 	while (env[i] && !ft_strnstr(env[i], "PATH=", 5))
 		i++;
+	if (!env[i])
+		return(NULL);
 	return (ft_split(env[i] + 5, ':'));
+}
+
+void	check_env(char **env)
+{
+	if (!*env)
+	{
+		ft_putendl_fd("No env", 2);
+		exit (1);
+	}
 }
 
 void	error_argument(void)
