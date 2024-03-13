@@ -14,18 +14,38 @@
 
 void	command_in(t_pipex *p, char **env, int *pfd)
 {
+	char **cmd;
+	char *cmd_path;
+
+	cmd = ft_split(p->cmd1, ' ');
+	if (!cmd)
+		exit(-1);
+	cmd_path = find_command_path(cmd[0], p->all_paths);
 	close(pfd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
 	dup2(pfd[1], STDOUT_FILENO);
-	execve(p->cmd1_path, p->cmd1, env);
+	if (cmd_path)
+		execve(cmd_path, cmd, env);
+	else
+		exit(127);
 }
 
 void	command_out(t_pipex *p, char **env, int *pfd)
 {
+	char **cmd;
+	char *cmd_path;
+
+	cmd = ft_split(p->cmd2, ' ');
+	if (!cmd)
+		exit(-1);
+	cmd_path = find_command_path(cmd[0], p->all_paths);
 	close(pfd[1]);
 	dup2(pfd[0], STDIN_FILENO);
 	dup2(p->fd_outfile, STDOUT_FILENO);
-	execve(p->cmd2_path, p->cmd2, env);
+	if (cmd_path)
+		execve(cmd_path, cmd, env);
+	else
+		exit(127);
 }
 
 void	execute_programs(t_pipex *p, char **env)
@@ -55,11 +75,11 @@ void	execute_programs(t_pipex *p, char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_pipex	pipex;
 
-	init_pipex(&pipex, argc, argv, env);
-	if (!pipex.status_code && pipex.fd_infile != -1)
+	if (argc == 5)
+		simple_pipe(argc, argv, env);
+	/*if (!pipex.status_code && pipex.fd_infile != -1)
 		execute_programs(&pipex, env);
-	clean_exit(&pipex);
-	return (pipex.status_code);
+	clean_exit(&pipex);*/
+	return (0);
 }

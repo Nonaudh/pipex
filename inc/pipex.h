@@ -31,14 +31,18 @@ typedef struct s_pipex
 {
 	int		fd_infile;
 	int		fd_outfile;
-	char	**cmd1;
-	char	**cmd2;
-	char	*cmd1_path;
-	char	*cmd2_path;
+	char	*cmd1;
+	char	*cmd2;
+	char	**all_paths;
 	int		status_code;
 	t_bool	here_doc;
 
 }	t_pipex;
+
+
+void	simple_pipe(int argc, char **argv, char **env);
+
+
 
 void	init_pipex(t_pipex *p, int argc, char **argv, char **env);
 void	parsing(t_pipex *p, char **env, char *infile, char *outfile);
@@ -54,7 +58,5 @@ char	**paths(char **env);
 char	*find_command_path(char *cmd, char **paths);
 void	clean_exit(t_pipex *p);
 void	free_the_tab(char **tab);
-
-void	init_bonus(t_pipex *p, int argc, char **argv, char **env);
 
 #endif

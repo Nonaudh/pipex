@@ -26,24 +26,6 @@ void	free_the_tab(char **tab)
 	free(tab);
 }
 
-void	clean_exit(t_pipex *p)
-{
-	if (p->here_doc)
-		unlink("here_doc.txt");
-	if (p->cmd1)
-		free_the_tab(p->cmd1);
-	if (p->cmd2)
-		free_the_tab(p->cmd2);
-	if (p->cmd1_path)
-		free(p->cmd1_path);
-	if (p->cmd2_path)
-		free(p->cmd2_path);
-	if (p->fd_infile != -1)
-		close(p->fd_infile);
-	if (p->fd_outfile != -1)
-		close(p->fd_outfile);
-}
-
 char	*find_command_path(char *cmd, char **paths)
 {
 	int		i;
