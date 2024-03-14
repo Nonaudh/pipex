@@ -46,30 +46,35 @@ void	execute_command(t_pipex_bonus *p_b, int argc, char **env, int i)
 		last_command(p_b, argc, env, i);
 }
 
+void	init_struct(t_pipe *f, int argc)
+{
+	f->fork_pid = malloc(sizeof(int) * (argc - 3));
+	if (!f->fork_pid)
+		exit(-1);
+	init_pipe_fd(f, argc);
+}
+
 void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 {
 	int	i;
+	t_pipe f;
 
 	i = 0;
-	p_b->fork_pid = malloc(sizeof(int) * (argc - 3));
-	if (!p_b->fork_pid)
-		exit(-1);
-	init_pipe_fd(p_b, argc);
+	init_struct(&f, argc);
 	while (i < (argc - 3))
 	{
-		p_b->fork_pid[i] = fork();
-		if (p_b->fork_pid[i] < 0)
+		f.fork_pid[i] = fork();
+		if (f.fork_pid[i] < 0)
 			exit(EXIT_FAILURE);
-		if (p_b->fork_pid[i] == 0)
+		if (f.fork_pid[i] == 0)
 		{
-			if (p_b->cmd_path[i])
-				execute_command(p_b, argc, env, i);
-			multi_clean_exit(p_b, argc);
+			execute_command(p_b, &f, argc, env, i);
+			//multi_clean_exit(p_b, argc);
 			exit(EXIT_FAILURE);
 		}
 		else
 			i++;
 	}
-	close_all_except(p_b, -1, -1, argc);
-	waitpid(p_b->fork_pid[argc - 4], NULL, 0);
+	close_all_except(&f, -1, -1, argc);
+	waitpid(f.fork_pid[argc - 4], NULL, 0);
 }

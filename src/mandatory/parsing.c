@@ -26,7 +26,7 @@ void	init_pipex(t_pipex *p, char **argv, char **env)
 	}
 }
 
-void	simple_pipe(int argc, char **argv, char **env)
+void	mandatory_pipe(int argc, char **argv, char **env)
 {
 	t_pipex p;
 	(void)argc;

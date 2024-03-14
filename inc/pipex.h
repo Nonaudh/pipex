@@ -40,13 +40,15 @@ typedef struct s_pipex
 }	t_pipex;
 
 
-void	simple_pipe(int argc, char **argv, char **env);
+void	mandatory_pipe(int argc, char **argv, char **env);
 
-
+void	bonus_pipe(int argc, char **argv, char **env);
 
 void	init_pipex(t_pipex *p, char **argv, char **env);
 
 void	open_files(t_pipex *p, char **argv);
+void    open_infile(t_pipex *p, char *infile);
+void    open_outfile(t_pipex *p, char *outfile);
 
 void	check_env(char **env);
 

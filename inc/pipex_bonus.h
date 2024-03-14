@@ -15,18 +15,25 @@
 
 # include "pipex.h"
 
+typedef struct s_pipe
+{
+	int	*fork_pid;
+	int	*pipe_fd;
+}	t_pipe;
+
 typedef struct s_pipex_bonus
 {
 	int		fd_infile;
 	int		fd_outfile;
-	char	***cmd;
-	char	**cmd_path;
-	int		**p_fd;
-	int		*fork_pid;
+	char	**cmd;
+	char	**all_paths;
 	int		status_code;
 }	t_pipex_bonus;
 
-void	init_multi_pipe(int argc, char **argv, char **env);
+
+
+void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env);
+
 void	check_out(t_pipex_bonus *p_b, int argc, char **argv, char **all_paths);
 void	check_in(t_pipex_bonus *p_b, char **argv, char **all_paths);
 void	init_cmds(t_pipex_bonus *p_b, int argc, char **argv);
