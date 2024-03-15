@@ -17,10 +17,10 @@ int	write_here_doc(char **argv)
 	char	*hd;
 	int		fd_hd;
 
-	fd_hd = open("here_doc.txt", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	fd_hd = open("here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	ft_putstr_fd("> ", 0);
 	hd = get_next_line(0);
-	while (ft_strncmp(hd, argv[2], ft_strlen(hd)))
+	while (!ft_strnstr(hd, argv[2], ft_strlen(hd)))
 	{
 		write(fd_hd, hd, ft_strlen(hd));
 		free(hd);
@@ -32,21 +32,24 @@ int	write_here_doc(char **argv)
 	return (0);
 }
 
+void	multi_clean_exit(t_pipex_bonus *p_b, int size)
+{
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	free(p_b->cmd);
+	free_the_tab(p_b->all_paths);
+}
+
 void	bonus_pipe(int argc, char **argv, char **env)
 {
 	t_pipex_bonus	p_b;
 
-	/*if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
+	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
 	{
-		p->here_doc = true;
-		p->status_code = 0;
+		p_b.here_doc = true;
 		write_here_doc(argv);
-		p->cmd1 = ft_split(argv[3], ' ');
-		p->cmd2 = ft_split(argv[4], ' ');
-		parsing(p, env, "here_doc.txt", argv[5]);
 	}
-	else*/
-	{
-		init_multi_pipe(&p_b, argc, argv, env);
-	}
+	else
+		p_b.here_doc = false;
+	init_multi_pipe(&p_b, argc, argv, env);
 }

@@ -35,8 +35,6 @@ typedef struct s_pipex
 	char	*cmd2;
 	char	**all_paths;
 	int		status_code;
-	t_bool	here_doc;
-
 }	t_pipex;
 
 

@@ -12,38 +12,92 @@
 
 #include "../../inc/pipex_bonus.h"
 
-void	first_command(t_pipex_bonus *p_b, int argc, char **env)
+void	first_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env)
 {
-	close_all_except(p_b, -1, p_b->p_fd[0][1], argc);
+	char **cmd_tmp;
+	char *cmd_path;
+
+	cmd_tmp = ft_split(p_b->cmd[0], ' ');
+	if (!cmd_tmp)
+		exit(-1);
+	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
+	close_all_except(f, -1, f->pipe_fd[0][1], argc);
 	dup2(p_b->fd_infile, STDIN_FILENO);
-	dup2(p_b->p_fd[0][1], STDOUT_FILENO);
-	execve(p_b->cmd_path[0], p_b->cmd[0], env);
+	dup2(f->pipe_fd[0][1], STDOUT_FILENO);
+	if (cmd_path)
+		execve(cmd_path, cmd_tmp, env);
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	close_all_except(f, -1, -1, argc);
+	free(p_b->cmd);
+	free_the_tab(cmd_tmp);
+	free_the_pipe(f, argc);
+	free(f->fork_pid);
+	free(cmd_path);
+	free_the_tab(p_b->all_paths);
+	exit(127);
 }
 
-void	middle_command(t_pipex_bonus *p_b, int argc, char **env, int i)
+void	middle_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
 {
-	close_all_except(p_b, p_b->p_fd[i - 1][0], p_b->p_fd[i][1], argc);
-	dup2(p_b->p_fd[i - 1][0], STDIN_FILENO);
-	dup2(p_b->p_fd[i][1], STDOUT_FILENO);
-	execve(p_b->cmd_path[i], p_b->cmd[i], env);
+	char **cmd_tmp;
+	char *cmd_path;
+
+	cmd_tmp = ft_split(p_b->cmd[i], ' ');
+	if (!cmd_tmp)
+		exit(-1);
+	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
+	close_all_except(f, f->pipe_fd[i - 1][0], f->pipe_fd[i][1], argc);
+	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
+	dup2(f->pipe_fd[i][1], STDOUT_FILENO);
+	if (cmd_path)
+		execve(cmd_path, cmd_tmp, env);
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	close_all_except(f, -1, -1, argc);
+	free(p_b->cmd);
+	free_the_tab(cmd_tmp);
+	free_the_pipe(f, argc);
+	free(f->fork_pid);
+	free(cmd_path);
+	free_the_tab(p_b->all_paths);
+	exit(127);
 }
 
-void	last_command(t_pipex_bonus *p_b, int argc, char **env, int i)
+void	last_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
 {
-	close_all_except(p_b, p_b->p_fd[i - 1][0], -1, argc);
-	dup2(p_b->p_fd[i - 1][0], STDIN_FILENO);
+	char **cmd_tmp;
+	char *cmd_path;
+
+	cmd_tmp = ft_split(p_b->cmd[i], ' ');
+	if (!cmd_tmp)
+		exit(-1);
+	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
+	close_all_except(f, f->pipe_fd[i - 1][0], -1, argc);
+	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(p_b->fd_outfile, STDOUT_FILENO);
-	execve(p_b->cmd_path[i], p_b->cmd[i], env);
+	if (cmd_path)
+		execve(cmd_path, cmd_tmp, env);
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	close_all_except(f, -1, -1, argc);
+	free_the_tab(cmd_tmp);
+	free_the_pipe(f, argc);
+	free(f->fork_pid);
+	free(cmd_path);
+	free(p_b->cmd);
+	free_the_tab(p_b->all_paths);
+	exit(127);
 }
 
-void	execute_command(t_pipex_bonus *p_b, int argc, char **env, int i)
+void	execute_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
 {
 	if (i == 0)
-		first_command(p_b, argc, env);
+		first_command(p_b, f, argc, env);
 	else if (i != argc - 4)
-		middle_command(p_b, argc, env, i);
+		middle_command(p_b, f, argc, env, i);
 	if (i == argc - 4)
-		last_command(p_b, argc, env, i);
+		last_command(p_b, f, argc, env, i);
 }
 
 void	init_struct(t_pipe *f, int argc)
@@ -52,6 +106,12 @@ void	init_struct(t_pipe *f, int argc)
 	if (!f->fork_pid)
 		exit(-1);
 	init_pipe_fd(f, argc);
+}
+
+void	free_struct(t_pipe *f, int argc)
+{
+	free(f->fork_pid);
+	free_the_pipe(f, argc);
 }
 
 void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
@@ -75,6 +135,7 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 		else
 			i++;
 	}
+	waitpid(f.fork_pid[argc - 4], NULL, WNOHANG);
 	close_all_except(&f, -1, -1, argc);
-	waitpid(f.fork_pid[argc - 4], NULL, 0);
+	free_struct(&f, argc);
 }

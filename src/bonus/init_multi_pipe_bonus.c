@@ -44,16 +44,27 @@ void	open_bonus_files(t_pipex_bonus *p_b, int argc, char **argv)
 
 void	init_pipex_bonus(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 {
-	p_b->status_code = 0;
+	if (!p_b->here_doc)
+	{
+		p_b->cmd_count = argc - 3;
+		init_cmds(p_b, argc, argv);
+	}
+	else
+	{
+		p_b->cmd_count = 2;
+		argc = 5;
+		init_cmds(p_b, 5, argv + 1);
+	}
 	p_b->all_paths = paths(env);
 	if (!p_b->all_paths)
-		exit (-1);
-	init_cmds(p_b, argc, argv);
+			exit (-1);
+	p_b->status_code = 0;
 }
 
 void	init_cmds(t_pipex_bonus *p_b, int argc, char **argv)
 {
 	int	i;
+	char **cmd_tmp;
 
 	i = 0;
 	p_b->cmd = malloc(sizeof(char *) * (argc - 2));
@@ -62,7 +73,7 @@ void	init_cmds(t_pipex_bonus *p_b, int argc, char **argv)
 		p_b->cmd[i] = argv[i + 2];
 		i++;
 	}
-	p_b->cmd = NULL;
+	p_b->cmd[i] = NULL;
 }
 
 void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env)
@@ -70,5 +81,6 @@ void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 	open_bonus_files(p_b, argc, argv);
 	init_pipex_bonus(p_b, argc, argv, env);
 	multi_pipe(p_b, argc, env);
+	multi_clean_exit(p_b, p_b->cmd_count);
 	exit(p_b->status_code);
 }
