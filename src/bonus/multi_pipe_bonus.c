@@ -118,6 +118,7 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 {
 	int	i;
 	t_pipe f;
+	int		status;
 
 	i = 0;
 	init_struct(&f, argc);
@@ -135,7 +136,12 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 		else
 			i++;
 	}
-	waitpid(f.fork_pid[argc - 4], NULL, WNOHANG);
+	waitpid(f.fork_pid[argc - 4], &status, WNOHANG);
+	if(WIFEXITED(status))
+		ft_putendl_fd("ok", 2);
+		/*p_b->status_code = 0;
+	else
+		p_b->status_code = WEXITSTATUS(status);*/
 	close_all_except(&f, -1, -1, argc);
 	free_struct(&f, argc);
 }
