@@ -12,6 +12,16 @@
 
 #include "../../inc/pipex.h"
 
+void	error_argument(void)
+{
+	ft_putendl_fd("Error\n", 2);
+	ft_putendl_fd("Arguments available\n", 2);
+	ft_putendl_fd("\t./pipex infile cmd cmd1 outfile", 2);
+	ft_putendl_fd("\t./pipex infile cmd cmd1 cmd2 ... cmdn outfile\n", 2);
+	ft_putendl_fd("\t./pipex here_doc LIMITER cmd cmd1 outfile\n", 2);
+	exit(EXIT_FAILURE);
+}
+
 void	free_the_tab(char **tab)
 {
 	int	i;
@@ -58,6 +68,11 @@ char	**paths(char **env)
 	int	i;
 
 	i = 0;
+	if (!*env)
+	{
+		ft_putendl_fd("No env", 2);
+		exit (1);
+	}
 	while (env[i] && !ft_strnstr(env[i], "PATH=", 5))
 		i++;
 	if (!env[i])
@@ -65,21 +80,9 @@ char	**paths(char **env)
 	return (ft_split(env[i] + 5, ':'));
 }
 
-void	check_env(char **env)
+void	clean_struct(t_pipex *p)
 {
-	if (!*env)
-	{
-		ft_putendl_fd("No env", 2);
-		exit (1);
-	}
-}
-
-void	error_argument(void)
-{
-	ft_putendl_fd("Error\n", 2);
-	ft_putendl_fd("Arguments available\n", 2);
-	ft_putendl_fd("\t./pipex infile cmd cmd1 outfile", 2);
-	ft_putendl_fd("\t./pipex infile cmd cmd1 cmd2 ... cmdn outfile\n", 2);
-	ft_putendl_fd("\t./pipex here_doc LIMITER cmd cmd1 outfile\n", 2);
-	exit(EXIT_FAILURE);
+	free_the_tab(p->all_paths);
+	close(p->fd_infile);
+	close(p->fd_outfile);
 }

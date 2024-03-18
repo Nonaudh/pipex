@@ -12,7 +12,6 @@
 
 #include "../../inc/pipex.h"
 
-
 void	init_pipex(t_pipex *p, char **argv, char **env)
 {
 	p->status_code = 0;
@@ -26,16 +25,23 @@ void	init_pipex(t_pipex *p, char **argv, char **env)
 	}
 }
 
-void	mandatory_pipe(int argc, char **argv, char **env)
+void	mandatory_pipe(char **argv, char **env)
 {
 	t_pipex p;
-	(void)argc;
 
 	open_files(&p, argv);
 	init_pipex(&p, argv, env);
-	execute_programs(&p, env);
-	free_the_tab(p.all_paths);
-	close(p.fd_infile);
-	close(p.fd_outfile);
+	pipex(&p, env);
+	clean_struct(&p);
 	exit(p.status_code);
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	if (argc == 5)
+		mandatory_pipe(argv, env);
+	else if (argc > 5)
+		pipe_bonus(argc, argv, env);
+	error_argument();
+	return (0);
 }

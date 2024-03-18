@@ -2,11 +2,16 @@ CC = cc
 
 CFLAGS = -g #-Wall -Wextra -Werror 
 
-SRC = 	src/mandatory/pipex.c src/mandatory/utils.c src/mandatory/parsing.c \
-		src/mandatory/open_files.c src/bonus/init_multi_pipe_bonus.c src/bonus/pipex_bonus.c \
-		src/bonus/utils_bonus.c src/bonus/multi_pipe_bonus.c
+SRC = 	src/mandatory/main.c src/mandatory/pipex.c src/mandatory/utils.c \
+		src/mandatory/open_files.c 
+
+SRC_BONUS = src/bonus/open_files_bonus.c src/bonus/utils_bonus2.c\
+			src/bonus/multi_pipe_bonus.c src/bonus/pipex_bonus.c \
+			src/bonus/utils_bonus.c
 		
 OBJ = $(SRC:%.c=%.o)
+
+OBJ_BONUS = $(SRC_BONUS:%.c=%.o)
 
 INCLUDE = -Llib/libft -lft
 
@@ -17,16 +22,16 @@ NAME = pipex
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
-$(NAME) : $(OBJ)
+$(NAME) : $(OBJ) $(OBJ_BONUS) 
 	@$(MAKE) -sC $(LIBFTDIR)
-	@$(CC) $(OBJ) $(INCLUDE) -o $(NAME)
+	@$(CC) $(OBJ) $(OBJ_BONUS) $(INCLUDE) -o $(NAME)
 	@tput setaf 2
 	@echo $(NAME) compiled
 
 all : $(NAME)
 
 clean :
-	@rm -f $(OBJ)
+	@rm -f $(OBJ) $(OBJ_BONUS)
 	@$(MAKE) -sC $(LIBFTDIR) clean
 	@echo object files deleted
 

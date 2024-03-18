@@ -26,15 +26,11 @@ void	first_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env)
 	dup2(f->pipe_fd[0][1], STDOUT_FILENO);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
 	close_all_except(f, -1, -1, argc);
-	free(p_b->cmd);
+	multi_clean_exit(p_b, argc);
+	free_struct(f, argc);
 	free_the_tab(cmd_tmp);
-	free_the_pipe(f, argc);
-	free(f->fork_pid);
 	free(cmd_path);
-	free_the_tab(p_b->all_paths);
 	exit(127);
 }
 
@@ -52,15 +48,11 @@ void	middle_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
 	dup2(f->pipe_fd[i][1], STDOUT_FILENO);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
 	close_all_except(f, -1, -1, argc);
-	free(p_b->cmd);
+	multi_clean_exit(p_b, argc);
+	free_struct(f, argc);
 	free_the_tab(cmd_tmp);
-	free_the_pipe(f, argc);
-	free(f->fork_pid);
 	free(cmd_path);
-	free_the_tab(p_b->all_paths);
 	exit(127);
 }
 
@@ -78,15 +70,11 @@ void	last_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
 	dup2(p_b->fd_outfile, STDOUT_FILENO);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
 	close_all_except(f, -1, -1, argc);
+	multi_clean_exit(p_b, argc);
+	free_struct(f, argc);
 	free_the_tab(cmd_tmp);
-	free_the_pipe(f, argc);
-	free(f->fork_pid);
 	free(cmd_path);
-	free(p_b->cmd);
-	free_the_tab(p_b->all_paths);
 	exit(127);
 }
 
@@ -98,20 +86,6 @@ void	execute_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
 		middle_command(p_b, f, argc, env, i);
 	if (i == argc - 4)
 		last_command(p_b, f, argc, env, i);
-}
-
-void	init_struct(t_pipe *f, int argc)
-{
-	f->fork_pid = malloc(sizeof(int) * (argc - 3));
-	if (!f->fork_pid)
-		exit(-1);
-	init_pipe_fd(f, argc);
-}
-
-void	free_struct(t_pipe *f, int argc)
-{
-	free(f->fork_pid);
-	free_the_pipe(f, argc);
 }
 
 void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
@@ -130,7 +104,6 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 		if (f.fork_pid[i] == 0)
 		{
 			execute_command(p_b, &f, argc, env, i);
-			//multi_clean_exit(p_b, argc);
 			exit(EXIT_FAILURE);
 		}
 		else

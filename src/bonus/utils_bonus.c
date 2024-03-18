@@ -66,3 +66,12 @@ void	init_pipe_fd(t_pipe *f, int argc)
 		i++;
 	}
 }
+void	multi_clean_exit(t_pipex_bonus *p_b, int size)
+{
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	if (p_b->here_doc)
+		unlink("here_doc");
+	free(p_b->cmd);
+	free_the_tab(p_b->all_paths);
+}

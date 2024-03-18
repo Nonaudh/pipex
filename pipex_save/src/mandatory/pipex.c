@@ -28,7 +28,7 @@ void	command_out(t_pipex *p, char **env, int *pfd)
 	execve(p->cmd2_path, p->cmd2, env);
 }
 
-void	execute_programs(t_pipex *p, char **env)
+void	pipex(t_pipex *p, char **env)
 {
 	int		pfd[2];
 	int		pid[2];
@@ -59,7 +59,7 @@ int	main(int argc, char **argv, char **env)
 
 	init_pipex(&pipex, argc, argv, env);
 	if (!pipex.status_code && pipex.fd_infile != -1)
-		execute_programs(&pipex, env);
+		pipex(&pipex, env);
 	clean_exit(&pipex);
 	return (pipex.status_code);
 }

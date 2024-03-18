@@ -12,35 +12,49 @@
 
 #include "../../inc/pipex_bonus.h"
 
-int	write_here_doc(char **argv)
+void	init_pipex_bonus(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 {
-	char	*hd;
-	int		fd_hd;
-
-	fd_hd = open("here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	ft_putstr_fd("> ", 0);
-	hd = get_next_line(0);
-	while (!ft_strnstr(hd, argv[2], ft_strlen(hd)))
+	if (!p_b->here_doc)
 	{
-		write(fd_hd, hd, ft_strlen(hd));
-		free(hd);
-		ft_putstr_fd("> ", 0);
-		hd = get_next_line(0);
+		p_b->cmd_count = argc - 3;
+		init_cmds(p_b, argc, argv);
 	}
-	free(hd);
-	close(fd_hd);
-	return (0);
+	else
+	{
+		p_b->cmd_count = 2;
+		argc = 5;
+		init_cmds(p_b, argc, argv + 1);
+	}
+	p_b->all_paths = paths(env);
+	if (!p_b->all_paths)
+			exit (-1);
+	p_b->status_code = 0;
 }
 
-void	multi_clean_exit(t_pipex_bonus *p_b, int size)
+void	init_cmds(t_pipex_bonus *p_b, int argc, char **argv)
 {
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
-	free(p_b->cmd);
-	free_the_tab(p_b->all_paths);
+	int	i;
+
+	i = 0;
+	p_b->cmd = malloc(sizeof(char *) * (argc - 2));
+	while (i < argc - 3)
+	{
+		p_b->cmd[i] = argv[i + 2];
+		i++;
+	}
+	p_b->cmd[i] = NULL;
 }
 
-void	bonus_pipe(int argc, char **argv, char **env)
+void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env)
+{
+	open_bonus_files(p_b, argc, argv);
+	init_pipex_bonus(p_b, argc, argv, env);
+	multi_pipe(p_b, argc, env);
+	multi_clean_exit(p_b, p_b->cmd_count);
+	exit(p_b->status_code);
+}
+
+void	pipe_bonus(int argc, char **argv, char **env)
 {
 	t_pipex_bonus	p_b;
 

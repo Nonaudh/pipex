@@ -45,7 +45,7 @@ void	parsing(t_pipex *p, char **env, char *infile, char *outfile);
 void	parsing_out(t_pipex *p, char *outfile, char **all_paths);
 void	parsing_in(t_pipex *p, char *infile, char **all_paths);
 
-void	execute_programs(t_pipex *p, char **env);
+void	pipex(t_pipex *p, char **env);
 void	command_out(t_pipex *p, char **env, int *pfd);
 void	command_in(t_pipex *p, char **env, int *pfd);
 
