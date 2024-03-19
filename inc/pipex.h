@@ -21,12 +21,6 @@
 # include <sys/wait.h>
 # include <stdio.h>
 
-typedef enum e_bool
-{
-	false,
-	true
-}	t_bool;
-
 typedef struct s_pipex
 {
 	int		fd_infile;

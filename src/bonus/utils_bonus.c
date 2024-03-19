@@ -12,14 +12,12 @@
 
 #include "../../inc/pipex_bonus.h"
 
-void	free_the_pipe(t_pipe *f, int argc)
+void	free_the_pipe(t_pipe *f, int size)
 {
-	int	pipe_number;
 	int	i;
 
-	pipe_number = argc - 4;
 	i = 0;
-	while (i < pipe_number)
+	while (i < size)
 	{
 		free(f->pipe_fd[i]);
 		i++;
@@ -27,12 +25,12 @@ void	free_the_pipe(t_pipe *f, int argc)
 	free(f->pipe_fd);
 }
 
-void	close_all_except(t_pipe *f, int in, int out, int argc)
+void	close_all_except(t_pipe *f, int in, int out, int size)
 {
 	int	i;
 
 	i = 0;
-	while (i < (argc - 4))
+	while (i < size)
 	{
 		if (f->pipe_fd[i][0] != in)
 			close(f->pipe_fd[i][0]);
@@ -66,7 +64,8 @@ void	init_pipe_fd(t_pipe *f, int argc)
 		i++;
 	}
 }
-void	multi_clean_exit(t_pipex_bonus *p_b, int size)
+
+void	multi_clean_exit(t_pipex_bonus *p_b)
 {
 	close(p_b->fd_infile);
 	close(p_b->fd_outfile);

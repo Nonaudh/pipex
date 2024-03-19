@@ -12,80 +12,91 @@
 
 #include "../../inc/pipex_bonus.h"
 
-void	first_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env)
+void	first_command(t_pipex_bonus *p_b, t_pipe *f, char **env)
 {
-	char **cmd_tmp;
-	char *cmd_path;
+	char	**cmd_tmp;
+	char	*cmd_path;
 
 	cmd_tmp = ft_split(p_b->cmd[0], ' ');
 	if (!cmd_tmp)
 		exit(-1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
-	close_all_except(f, -1, f->pipe_fd[0][1], argc);
+	close_all_except(f, -1, f->pipe_fd[0][1], p_b->cmd_count - 1);
 	dup2(p_b->fd_infile, STDIN_FILENO);
 	dup2(f->pipe_fd[0][1], STDOUT_FILENO);
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	close(f->pipe_fd[0][1]);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close_all_except(f, -1, -1, argc);
-	multi_clean_exit(p_b, argc);
-	free_struct(f, argc);
+	close_all_except(f, -1, -1, p_b->cmd_count - 1);
+	multi_clean_exit(p_b);
+	free_struct(f);
 	free_the_tab(cmd_tmp);
 	free(cmd_path);
 	exit(127);
 }
 
-void	middle_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
+void	middle_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 {
-	char **cmd_tmp;
-	char *cmd_path;
+	char	**cmd_tmp;
+	char	*cmd_path;
 
 	cmd_tmp = ft_split(p_b->cmd[i], ' ');
 	if (!cmd_tmp)
 		exit(-1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
-	close_all_except(f, f->pipe_fd[i - 1][0], f->pipe_fd[i][1], argc);
+	close_all_except(f, f->pipe_fd[i - 1][0], f->pipe_fd[i][1], p_b->cmd_count - 1);
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(f->pipe_fd[i][1], STDOUT_FILENO);
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	close(f->pipe_fd[i - 1][0]);
+	close(f->pipe_fd[i][1]);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close_all_except(f, -1, -1, argc);
-	multi_clean_exit(p_b, argc);
-	free_struct(f, argc);
+	close_all_except(f, -1, -1, p_b->cmd_count - 1);
+	multi_clean_exit(p_b);
+	free_struct(f);
 	free_the_tab(cmd_tmp);
 	free(cmd_path);
 	exit(127);
 }
 
-void	last_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
+void	last_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 {
-	char **cmd_tmp;
-	char *cmd_path;
+	char	**cmd_tmp;
+	char	*cmd_path;
 
 	cmd_tmp = ft_split(p_b->cmd[i], ' ');
 	if (!cmd_tmp)
 		exit(-1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
-	close_all_except(f, f->pipe_fd[i - 1][0], -1, argc);
+	//close_all_except(f, f->pipe_fd[i - 1][0], -1, p_b->cmd_count - 1);
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(p_b->fd_outfile, STDOUT_FILENO);
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	//close(f->pipe_fd[i - 1][0]);
+	close_all_except(f, -1, -1, p_b->cmd_count - 1); //
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close_all_except(f, -1, -1, argc);
-	multi_clean_exit(p_b, argc);
-	free_struct(f, argc);
+	close_all_except(f, -1, -1, p_b->cmd_count - 1);
+	multi_clean_exit(p_b);
+	free_struct(f);
 	free_the_tab(cmd_tmp);
 	free(cmd_path);
 	exit(127);
 }
 
-void	execute_command(t_pipex_bonus *p_b, t_pipe *f, int argc, char **env, int i)
+void	execute_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 {
 	if (i == 0)
-		first_command(p_b, f, argc, env);
-	else if (i != argc - 4)
-		middle_command(p_b, f, argc, env, i);
-	if (i == argc - 4)
-		last_command(p_b, f, argc, env, i);
+		first_command(p_b, f, env);
+	else if (i < p_b->cmd_count - 1)
+		middle_command(p_b, f, env, i);
+	if (i == p_b->cmd_count - 1)
+		last_command(p_b, f, env, i);
 }
 
 void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
@@ -95,26 +106,26 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 	int		status;
 
 	i = 0;
-	init_struct(&f, argc);
-	while (i < (argc - 3))
+	init_struct(p_b, &f, argc);
+	while (i < p_b->cmd_count)
 	{
 		f.fork_pid[i] = fork();
 		if (f.fork_pid[i] < 0)
 			exit(EXIT_FAILURE);
 		if (f.fork_pid[i] == 0)
 		{
-			execute_command(p_b, &f, argc, env, i);
+			execute_command(p_b, &f, env, i);
 			exit(EXIT_FAILURE);
 		}
 		else
 			i++;
 	}
-	waitpid(f.fork_pid[argc - 4], &status, WNOHANG);
+	waitpid(f.fork_pid[p_b->cmd_count - 1], &status, WNOHANG);
+	ft_printf("exit; %d\n", WIFEXITED(status));
 	if(WIFEXITED(status))
-		ft_putendl_fd("ok", 2);
-		/*p_b->status_code = 0;
+		ft_printf("status; %d\n", WEXITSTATUS(status));
 	else
-		p_b->status_code = WEXITSTATUS(status);*/
-	close_all_except(&f, -1, -1, argc);
-	free_struct(&f, argc);
+		ft_printf("statko; %d\n", WEXITSTATUS(status));
+	close_all_except(&f, -1, -1, p_b->cmd_count - 1);
+	free_struct(&f);
 }

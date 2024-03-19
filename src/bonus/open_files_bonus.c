@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   open_files_bonus.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahuge <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/19 14:25:24 by ahuge             #+#    #+#             */
+/*   Updated: 2024/03/19 14:25:26 by ahuge            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/pipex_bonus.h"
 
 void	write_here_doc(char **argv)
@@ -10,7 +22,8 @@ void	write_here_doc(char **argv)
 		exit(-1);
 	ft_putstr_fd("> ", 0);
 	hd = get_next_line(0);
-	while (!ft_strnstr(hd, argv[2], ft_strlen(hd)))
+	while (ft_strncmp(hd, argv[2], ft_strlen(argv[2])) ||
+			(ft_strlen(hd) - 1 != ft_strlen(argv[2])))
 	{
 		write(fd_hd, hd, ft_strlen(hd));
 		free(hd);

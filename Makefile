@@ -1,11 +1,11 @@
 CC = cc
 
-CFLAGS = -g #-Wall -Wextra -Werror 
+CFLAGS = -g -Wall -Wextra -Werror 
 
 SRC = 	src/mandatory/main.c src/mandatory/pipex.c src/mandatory/utils.c \
 		src/mandatory/open_files.c 
 
-SRC_BONUS = src/bonus/open_files_bonus.c src/bonus/utils_bonus2.c\
+SRC_BONUS = src/bonus/open_files_bonus.c src/bonus/utils_bonus2.c \
 			src/bonus/multi_pipe_bonus.c src/bonus/pipex_bonus.c \
 			src/bonus/utils_bonus.c
 		
