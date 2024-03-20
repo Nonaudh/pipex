@@ -21,15 +21,11 @@ void	first_command(t_pipex_bonus *p_b, t_pipe *f, char **env)
 	if (!cmd_tmp)
 		exit(-1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
-	close_all_except(f, -1, f->pipe_fd[0][1], p_b->cmd_count - 1);
 	dup2(p_b->fd_infile, STDIN_FILENO);
 	dup2(f->pipe_fd[0][1], STDOUT_FILENO);
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
-	close(f->pipe_fd[0][1]);
+	close_files_and_pipes(p_b, f);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close_all_except(f, -1, -1, p_b->cmd_count - 1);
 	multi_clean_exit(p_b);
 	free_struct(f);
 	free_the_tab(cmd_tmp);
@@ -46,16 +42,11 @@ void	middle_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 	if (!cmd_tmp)
 		exit(-1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
-	close_all_except(f, f->pipe_fd[i - 1][0], f->pipe_fd[i][1], p_b->cmd_count - 1);
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(f->pipe_fd[i][1], STDOUT_FILENO);
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
-	close(f->pipe_fd[i - 1][0]);
-	close(f->pipe_fd[i][1]);
+	close_files_and_pipes(p_b, f);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close_all_except(f, -1, -1, p_b->cmd_count - 1);
 	multi_clean_exit(p_b);
 	free_struct(f);
 	free_the_tab(cmd_tmp);
@@ -72,16 +63,11 @@ void	last_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 	if (!cmd_tmp)
 		exit(-1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
-	//close_all_except(f, f->pipe_fd[i - 1][0], -1, p_b->cmd_count - 1);
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(p_b->fd_outfile, STDOUT_FILENO);
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
-	//close(f->pipe_fd[i - 1][0]);
-	close_all_except(f, -1, -1, p_b->cmd_count - 1); //
+	close_files_and_pipes(p_b, f);
 	if (cmd_path)
 		execve(cmd_path, cmd_tmp, env);
-	close_all_except(f, -1, -1, p_b->cmd_count - 1);
 	multi_clean_exit(p_b);
 	free_struct(f);
 	free_the_tab(cmd_tmp);
@@ -103,10 +89,10 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 {
 	int	i;
 	t_pipe f;
-	int		status;
+	(void)argc;
 
 	i = 0;
-	init_struct(p_b, &f, argc);
+	init_struct(p_b, &f);
 	while (i < p_b->cmd_count)
 	{
 		f.fork_pid[i] = fork();
@@ -120,12 +106,6 @@ void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
 		else
 			i++;
 	}
-	waitpid(f.fork_pid[p_b->cmd_count - 1], &status, WNOHANG);
-	ft_printf("exit; %d\n", WIFEXITED(status));
-	if(WIFEXITED(status))
-		ft_printf("status; %d\n", WEXITSTATUS(status));
-	else
-		ft_printf("statko; %d\n", WEXITSTATUS(status));
-	close_all_except(&f, -1, -1, p_b->cmd_count - 1);
+	waitpid(f.fork_pid[p_b->cmd_count - 1], NULL, WNOHANG);
 	free_struct(&f);
 }

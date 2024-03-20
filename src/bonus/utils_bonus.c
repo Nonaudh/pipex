@@ -25,40 +25,35 @@ void	free_the_pipe(t_pipe *f, int size)
 	free(f->pipe_fd);
 }
 
-void	close_all_except(t_pipe *f, int in, int out, int size)
+void	close_all_pipe(t_pipe *f, int size)
 {
 	int	i;
 
 	i = 0;
 	while (i < size)
 	{
-		if (f->pipe_fd[i][0] != in)
-			close(f->pipe_fd[i][0]);
-		if (f->pipe_fd[i][1] != out)
-			close(f->pipe_fd[i][1]);
+		close(f->pipe_fd[i][0]);
+		close(f->pipe_fd[i][1]);
 		i++;
 	}
 }
 
-void	init_pipe_fd(t_pipe *f, int argc)
+void	init_pipe_fd(t_pipe *f)
 {
-	int	pipe_number;
 	int	i;
 
-	pipe_number = argc - 4;
 	i = 0;
-	f->pipe_fd = malloc(sizeof(int *) * (pipe_number));
+	f->pipe_fd = malloc(sizeof(int *) * (*f->cmd_count - 1));
 	if (!f->pipe_fd)
 		exit(EXIT_FAILURE);
-	while (i < pipe_number)
+	while (i < *f->cmd_count - 1)
 	{
 		f->pipe_fd[i] = malloc(sizeof(int) * 2);
 		if (!f->pipe_fd[i])
 			exit(EXIT_FAILURE);
 		if (pipe(f->pipe_fd[i]))
 		{
-			//close_all_except(p_b, -1, -1, i + 3);
-			//multi_clean_exit(p_b, argc);
+			close_all_pipe(f, i + 1);
 			exit(EXIT_FAILURE);
 		}
 		i++;
@@ -67,10 +62,6 @@ void	init_pipe_fd(t_pipe *f, int argc)
 
 void	multi_clean_exit(t_pipex_bonus *p_b)
 {
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
-	if (p_b->here_doc)
-		unlink("here_doc");
 	free(p_b->cmd);
 	free_the_tab(p_b->all_paths);
 }

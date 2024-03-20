@@ -56,11 +56,12 @@ void	middle_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i);
 void	first_command(t_pipex_bonus *p_b, t_pipe *f, char **env);
 
 void	multi_clean_exit(t_pipex_bonus *p_b);
-void	init_pipe_fd(t_pipe *f, int argc);
-void	close_all_except(t_pipe *f, int in, int out, int argc);
+void	init_pipe_fd(t_pipe *f);
+void	close_all_pipe(t_pipe *f, int argc);
 void	free_the_pipe(t_pipe *f, int argc);
 
-void	init_struct(t_pipex_bonus *p_b, t_pipe *f, int argc);
+void	init_struct(t_pipex_bonus *p_b, t_pipe *f);
 void	free_struct(t_pipe *f);
+void	close_files_and_pipes(t_pipex_bonus *p_b, t_pipe *f);
 
 #endif

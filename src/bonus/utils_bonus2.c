@@ -12,17 +12,24 @@
 
 #include "../../inc/pipex_bonus.h"
 
-void	init_struct(t_pipex_bonus *p_b, t_pipe *f, int argc)
+void	init_struct(t_pipex_bonus *p_b, t_pipe *f)
 {
-	f->fork_pid = malloc(sizeof(int) * (argc - 3));
+	f->fork_pid = malloc(sizeof(int) * (p_b->cmd_count));
 	if (!f->fork_pid)
 		exit(-1);
-	init_pipe_fd(f, argc);
 	f->cmd_count = &p_b->cmd_count;
+	init_pipe_fd(f);
 }
 
 void	free_struct(t_pipe *f)
 {
 	free(f->fork_pid);
 	free_the_pipe(f, *f->cmd_count - 1);
+}
+
+void	close_files_and_pipes(t_pipex_bonus *p_b, t_pipe *f)
+{
+	close(p_b->fd_infile);
+	close(p_b->fd_outfile);
+	close_all_pipe(f, p_b->cmd_count - 1);
 }

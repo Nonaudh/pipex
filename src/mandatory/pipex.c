@@ -24,12 +24,14 @@ void	command_in(t_pipex *p, char **env, int *pfd)
 	close(pfd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
 	dup2(pfd[1], STDOUT_FILENO);
+	close(pfd[0]);
+	close(pfd[1]);
+	clean_struct(p);
 	if (cmd_path)
 		execve(cmd_path, cmd, env);
 	close(pfd[1]);
 	free_the_tab(cmd);
 	free(cmd_path);
-	clean_struct(p);
 	exit(127);
 }
 
@@ -45,12 +47,14 @@ void	command_out(t_pipex *p, char **env, int *pfd)
 	close(pfd[1]);
 	dup2(pfd[0], STDIN_FILENO);
 	dup2(p->fd_outfile, STDOUT_FILENO);
+	close(pfd[0]);
+	close(pfd[1]);
+	clean_struct(p);
 	if (cmd_path)
 		execve(cmd_path, cmd, env);
 	close(pfd[0]);
 	free_the_tab(cmd);
 	free(cmd_path);
-	clean_struct(p);
 	exit(127);
 }
 

@@ -64,5 +64,7 @@ void	pipe_bonus(int argc, char **argv, char **env)
 	init_multi_pipe(&p_b, argc, argv, env);
 	multi_pipe(&p_b, argc, env);
 	multi_clean_exit(&p_b);
+	if (p_b.here_doc)
+		unlink("here_doc");
 	exit(p_b.status_code);
 }
