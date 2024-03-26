@@ -26,7 +26,12 @@ void	init_pipex_bonus(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 	}
 	p_b->all_paths = paths(env);
 	if (!p_b->all_paths)
-			exit (-1);
+	{
+		free(p_b->cmd);
+		close(p_b->fd_infile);
+		close(p_b->fd_outfile);
+		exit (-1);
+	}
 	p_b->status_code = 0;
 }
 

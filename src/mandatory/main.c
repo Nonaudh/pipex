@@ -20,8 +20,9 @@ void	init_pipex(t_pipex *p, char **argv, char **env)
 	p->all_paths = paths(env);
 	if (!p->all_paths)
 	{
-		ft_putendl_fd("PATHS not found", 2);
-		exit(1);
+		close(p->fd_infile);
+		close(p->fd_outfile);
+		exit(-1);
 	}
 }
 
@@ -35,9 +36,18 @@ void	mandatory_pipe(char **argv, char **env)
 	clean_struct(&p);
 	exit(p.status_code);
 }
+void	check_env(char **env)
+{
+	if (!*env)
+	{
+		ft_putendl_fd("No env", 2);
+		exit (1);
+	}
+}
 
 int	main(int argc, char **argv, char **env)
 {
+	check_env(env);
 	if (argc == 5)
 		mandatory_pipe(argv, env);
 	else if (argc > 5)
