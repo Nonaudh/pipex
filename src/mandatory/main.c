@@ -28,7 +28,7 @@ void	init_pipex(t_pipex *p, char **argv, char **env)
 
 void	mandatory_pipe(char **argv, char **env)
 {
-	t_pipex p;
+	t_pipex	p;
 
 	open_files(&p, argv);
 	init_pipex(&p, argv, env);
@@ -36,6 +36,7 @@ void	mandatory_pipe(char **argv, char **env)
 	clean_struct(&p);
 	exit(p.status_code);
 }
+
 void	check_env(char **env)
 {
 	if (!*env)

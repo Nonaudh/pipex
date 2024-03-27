@@ -52,7 +52,7 @@ void	init_cmds(t_pipex_bonus *p_b, char **argv)
 void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 {
 	open_bonus_files(p_b, argc, argv);
-	init_pipex_bonus(p_b, argc, argv, env);	
+	init_pipex_bonus(p_b, argc, argv, env);
 }
 
 void	pipe_bonus(int argc, char **argv, char **env)
@@ -67,7 +67,7 @@ void	pipe_bonus(int argc, char **argv, char **env)
 	else
 		p_b.here_doc = false;
 	init_multi_pipe(&p_b, argc, argv, env);
-	multi_pipe(&p_b, argc, env);
+	multi_pipe(&p_b, env);
 	multi_clean_exit(&p_b);
 	if (p_b.here_doc)
 		unlink("here_doc");

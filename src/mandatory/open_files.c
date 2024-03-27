@@ -12,8 +12,7 @@
 
 #include "../../inc/pipex.h"
 
-
-void    open_infile(t_pipex *p, char *infile)
+void	open_infile(t_pipex *p, char *infile)
 {
 	if (access(infile, R_OK))
 	{
@@ -28,7 +27,7 @@ void    open_infile(t_pipex *p, char *infile)
 	}
 }
 
-void    open_outfile(t_pipex *p, char *outfile)
+void	open_outfile(t_pipex *p, char *outfile)
 {
 	p->fd_outfile = open(outfile, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (p->fd_outfile == -1)

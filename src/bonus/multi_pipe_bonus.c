@@ -85,11 +85,10 @@ void	execute_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 		last_command(p_b, f, env, i);
 }
 
-void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env)
+void	multi_pipe(t_pipex_bonus *p_b, char **env)
 {
-	int	i;
-	t_pipe f;
-	(void)argc;
+	int		i;
+	t_pipe	f;
 
 	i = 0;
 	init_struct(p_b, &f);

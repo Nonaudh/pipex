@@ -49,7 +49,7 @@ void	open_outfile_bonus(t_pipex_bonus *p_b, char *outfile);
 void	open_infile_bonus(t_pipex_bonus *p_b, char *infile);
 void	write_here_doc(char **argv);
 
-void	multi_pipe(t_pipex_bonus *p_b, int argc, char **env);
+void	multi_pipe(t_pipex_bonus *p_b, char **env);
 void	execute_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i);
 void	last_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i);
 void	middle_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i);

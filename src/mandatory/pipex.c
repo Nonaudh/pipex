@@ -14,8 +14,8 @@
 
 void	command_in(t_pipex *p, char **env, int *pfd)
 {
-	char **cmd;
-	char *cmd_path;
+	char	**cmd;
+	char	*cmd_path;
 
 	cmd = ft_split(p->cmd1, ' ');
 	if (!cmd)
@@ -37,8 +37,8 @@ void	command_in(t_pipex *p, char **env, int *pfd)
 
 void	command_out(t_pipex *p, char **env, int *pfd)
 {
-	char **cmd;
-	char *cmd_path;
+	char	**cmd;
+	char	*cmd_path;
 
 	cmd = ft_split(p->cmd2, ' ');
 	if (!cmd)
