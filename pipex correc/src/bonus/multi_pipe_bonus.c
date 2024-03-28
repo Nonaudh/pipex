@@ -112,7 +112,7 @@ void	multi_pipe(t_pipex_bonus *p_b, char **env)
 	while (waitpid(-1, NULL, 0) > 0)
 		;
 
-	waitpid(f.fork_pid[p_b->cmd_count - 1], NULL, WNOHANG);
+	//waitpid(f.fork_pid[p_b->cmd_count - 1], NULL, WNOHANG);
 	close_files_and_pipes(p_b, &f);
 	free_struct(&f);
 }

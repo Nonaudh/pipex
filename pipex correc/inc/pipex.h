@@ -31,6 +31,8 @@ typedef struct s_pipex
 	int		status_code;
 }	t_pipex;
 
+
+/*
 struct {
 	int argc;
 	char *argv[];
@@ -92,7 +94,7 @@ exec_commands(const t_command *commands[], int fd_infile, int fd_outfile) {
 
 
 }
-
+*/
 
 void	mandatory_pipe(char **argv, char **env);
 void	init_pipex(t_pipex *p, char **argv, char **env);
