@@ -40,6 +40,7 @@ void	open_outfile(t_pipex *p, char *outfile);
 void	open_infile(t_pipex *p, char *infile);
 
 void	pipex(t_pipex *p, char **env);
+void	wait_for_all_process(void);
 void	command_in(t_pipex *p, char **env, int *pfd);
 void	command_out(t_pipex *p, char **env, int *pfd);
 

@@ -106,10 +106,6 @@ void	multi_pipe(t_pipex_bonus *p_b, char **env)
 			i++;
 	}
 	close_files_and_pipes(p_b, &f);
-
-	while (waitpid(-1, NULL, 0) > 0)
-		;
-	
-	//waitpid(f.fork_pid[p_b->cmd_count - 1], NULL, 0);
+	wait_for_all_process();
 	free_struct(&f);
 }

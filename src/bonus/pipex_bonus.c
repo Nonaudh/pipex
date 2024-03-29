@@ -41,6 +41,8 @@ void	init_cmds(t_pipex_bonus *p_b, char **argv)
 
 	i = 0;
 	p_b->cmd = malloc(sizeof(char *) * (p_b->cmd_count + 1));
+	if (!p_b->cmd)
+		exit(1);
 	while (i < p_b->cmd_count)
 	{
 		p_b->cmd[i] = argv[i + 2];
@@ -54,22 +56,24 @@ void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 	open_bonus_files(p_b, argc, argv);
 	init_pipex_bonus(p_b, argc, argv, env);
 }
+void	check_if_here_doc(t_pipex_bonus *p_b, int argc, char **argv)
+{
+	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
+	{
+		p_b->here_doc = true;
+		write_here_doc(argv);
+	}
+	else
+		p_b->here_doc = false;
+}
 
 void	pipe_bonus(int argc, char **argv, char **env)
 {
 	t_pipex_bonus	p_b;
 
-	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)
-	{
-		p_b.here_doc = true;
-		write_here_doc(argv);
-	}
-	else
-		p_b.here_doc = false;
+	check_if_here_doc(&p_b, argc, argv);
 	init_multi_pipe(&p_b, argc, argv, env);
 	multi_pipe(&p_b, env);
 	multi_clean_exit(&p_b);
-	if (p_b.here_doc)
-		unlink("here_doc");
 	exit(p_b.status_code);
 }

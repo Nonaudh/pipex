@@ -57,6 +57,11 @@ void	command_out(t_pipex *p, char **env, int *pfd)
 	free(cmd_path);
 	exit(127);
 }
+void	wait_for_all_process(void)
+{
+	while (waitpid(-1, NULL, 0) > 0)
+	;
+}
 
 void	pipex(t_pipex *p, char **env)
 {
@@ -80,7 +85,5 @@ void	pipex(t_pipex *p, char **env)
 	}
 	close(pfd[0]);
 	close(pfd[1]);
-	while (waitpid(-1, NULL, 0) > 0)
-	;
-	//waitpid(pid[1], NULL, 0);
+	wait_for_all_process();
 }

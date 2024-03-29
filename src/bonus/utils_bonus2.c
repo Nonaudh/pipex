@@ -16,7 +16,7 @@ void	init_struct(t_pipex_bonus *p_b, t_pipe *f)
 {
 	f->fork_pid = malloc(sizeof(int) * (p_b->cmd_count));
 	if (!f->fork_pid)
-		exit(-1);
+		exit(1);
 	f->cmd_count = &p_b->cmd_count;
 	init_pipe_fd(f);
 }
