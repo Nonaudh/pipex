@@ -22,7 +22,7 @@ void	init_pipex(t_pipex *p, char **argv, char **env)
 	{
 		close(p->fd_infile);
 		close(p->fd_outfile);
-		exit(-1);
+		exit(1);
 	}
 }
 

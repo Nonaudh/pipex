@@ -23,7 +23,7 @@ void	write_here_doc(char **argv)
 	ft_putstr_fd("> ", 0);
 	hd = get_next_line(0);
 	while (hd && (ft_strncmp(hd, argv[2], ft_strlen(argv[2]))
-		|| (ft_strlen(hd) - 1 != ft_strlen(argv[2]))))
+			|| (ft_strlen(hd) - 1 != ft_strlen(argv[2]))))
 	{
 		write(fd_hd, hd, ft_strlen(hd));
 		free(hd);

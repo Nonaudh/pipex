@@ -56,6 +56,7 @@ void	init_multi_pipe(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 	open_bonus_files(p_b, argc, argv);
 	init_pipex_bonus(p_b, argc, argv, env);
 }
+
 void	check_if_here_doc(t_pipex_bonus *p_b, int argc, char **argv)
 {
 	if (!ft_strncmp(argv[1], "here_doc", 8) && argc == 6)

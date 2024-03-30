@@ -23,7 +23,7 @@ void	open_infile(t_pipex *p, char *infile)
 	{
 		p->fd_infile = open(infile, O_RDONLY);
 		if (!p->fd_infile)
-			exit(-1);
+			exit(1);
 	}
 }
 
@@ -34,7 +34,7 @@ void	open_outfile(t_pipex *p, char *outfile)
 	{
 		perror(outfile);
 		close(p->fd_infile);
-		exit(-1);
+		exit(1);
 	}
 }
 

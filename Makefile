@@ -20,7 +20,7 @@ LIBFTDIR = lib/libft
 NAME = pipex
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
+	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
 $(NAME) : $(OBJ) $(OBJ_BONUS) 
 	@$(MAKE) -sC $(LIBFTDIR)
