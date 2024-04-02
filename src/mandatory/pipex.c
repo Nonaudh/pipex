@@ -75,7 +75,10 @@ void	pipex(t_pipex *p, char **env)
 	if (pid[0] < 0)
 		exit(EXIT_FAILURE);
 	if (pid[0] == 0)
-		command_in(p, env, pfd);
+	{
+		if (p->fd_infile)
+			command_in(p, env, pfd);
+	}
 	else
 	{
 		pid[1] = fork();

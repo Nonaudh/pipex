@@ -24,7 +24,7 @@ void	first_command(t_pipex_bonus *p_b, t_pipe *f, char **env)
 	dup2(p_b->fd_infile, STDIN_FILENO);
 	dup2(f->pipe_fd[0][1], STDOUT_FILENO);
 	close_files_and_pipes(p_b, f);
-	if (cmd_path)
+	if (cmd_path && p_b->fd_infile)
 		execve(cmd_path, cmd_tmp, env);
 	multi_clean_exit(p_b);
 	free_struct(f);

@@ -17,7 +17,8 @@ void	open_infile(t_pipex *p, char *infile)
 	if (access(infile, R_OK))
 	{
 		perror(infile);
-		exit(1);
+		p->fd_infile = 0;
+		//exit(1);
 	}
 	else
 	{

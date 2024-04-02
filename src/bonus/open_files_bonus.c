@@ -19,7 +19,7 @@ void	write_here_doc(char **argv)
 
 	fd_hd = open("/tmp/here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (!fd_hd)
-		exit(-1);
+		exit(1);
 	ft_putstr_fd("> ", 0);
 	hd = get_next_line(0);
 	while (hd && (ft_strncmp(hd, argv[2], ft_strlen(argv[2]))
@@ -39,7 +39,7 @@ void	open_infile_bonus(t_pipex_bonus *p_b, char *infile)
 	if (access(infile, R_OK))
 	{
 		perror(infile);
-		exit(1);
+		p_b->fd_infile = 0;
 	}
 	else
 	{
