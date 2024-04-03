@@ -12,7 +12,7 @@
 
 #include "../../inc/pipex.h"
 
-void	command_in(t_pipex *p, char **env, int *pfd)
+void	command_in(t_pipex *p, char **env, int *pipe_fd)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -21,21 +21,21 @@ void	command_in(t_pipex *p, char **env, int *pfd)
 	if (!cmd)
 		exit(-1);
 	cmd_path = find_command_path(cmd[0], p->all_paths);
-	close(pfd[0]);
+	close(pipe_fd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
-	dup2(pfd[1], STDOUT_FILENO);
-	close(pfd[0]);
-	close(pfd[1]);
+	dup2(pipe_fd[1], STDOUT_FILENO);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	clean_struct(p);
-	if (cmd_path)
+	if (cmd_path && p->fd_infile != -1)
 		execve(cmd_path, cmd, env);
-	close(pfd[1]);
+	close(pipe_fd[1]);
 	free_the_tab(cmd);
 	free(cmd_path);
 	exit(127);
 }
 
-void	command_out(t_pipex *p, char **env, int *pfd)
+void	command_out(t_pipex *p, char **env, int *pipe_fd)
 {
 	char	**cmd;
 	char	*cmd_path;
@@ -44,15 +44,15 @@ void	command_out(t_pipex *p, char **env, int *pfd)
 	if (!cmd)
 		exit(-1);
 	cmd_path = find_command_path(cmd[0], p->all_paths);
-	close(pfd[1]);
-	dup2(pfd[0], STDIN_FILENO);
+	close(pipe_fd[1]);
+	dup2(pipe_fd[0], STDIN_FILENO);
 	dup2(p->fd_outfile, STDOUT_FILENO);
-	close(pfd[0]);
-	close(pfd[1]);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	clean_struct(p);
 	if (cmd_path)
 		execve(cmd_path, cmd, env);
-	close(pfd[0]);
+	close(pipe_fd[0]);
 	free_the_tab(cmd);
 	free(cmd_path);
 	exit(127);
@@ -66,28 +66,25 @@ void	wait_for_all_process(void)
 
 void	pipex(t_pipex *p, char **env)
 {
-	int		pfd[2];
-	int		pid[2];
+	int		pipe_fd[2];
+	int		fork_pid[2];
 
-	if (pipe(pfd))
+	if (pipe(pipe_fd))
 		exit(EXIT_FAILURE);
-	pid[0] = fork();
-	if (pid[0] < 0)
+	fork_pid[0] = fork();
+	if (fork_pid[0] < 0)
 		exit(EXIT_FAILURE);
-	if (pid[0] == 0)
-	{
-		if (p->fd_infile)
-			command_in(p, env, pfd);
-	}
+	if (fork_pid[0] == 0)
+		command_in(p, env, pipe_fd);
 	else
 	{
-		pid[1] = fork();
-		if (pid[1] < 0)
+		fork_pid[1] = fork();
+		if (fork_pid[1] < 0)
 			exit(EXIT_FAILURE);
-		if (pid[1] == 0)
-			command_out(p, env, pfd);
+		if (fork_pid[1] == 0)
+			command_out(p, env, pipe_fd);
 	}
-	close(pfd[0]);
-	close(pfd[1]);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	wait_for_all_process();
 }

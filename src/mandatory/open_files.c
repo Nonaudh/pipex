@@ -17,13 +17,13 @@ void	open_infile(t_pipex *p, char *infile)
 	if (access(infile, R_OK))
 	{
 		perror(infile);
-		p->fd_infile = 0;
+		p->fd_infile = -1;
 		//exit(1);
 	}
 	else
 	{
 		p->fd_infile = open(infile, O_RDONLY);
-		if (!p->fd_infile)
+		if (p->fd_infile == -1)
 			exit(1);
 	}
 }

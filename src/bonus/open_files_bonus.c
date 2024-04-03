@@ -44,7 +44,7 @@ void	open_infile_bonus(t_pipex_bonus *p_b, char *infile)
 	else
 	{
 		p_b->fd_infile = open(infile, O_RDONLY);
-		if (!p_b->fd_infile)
+		if (p_b->fd_infile == -1)
 			exit(1);
 		if (p_b->here_doc)
 			unlink(infile);
