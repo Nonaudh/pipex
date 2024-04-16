@@ -24,13 +24,13 @@ void	init_pipex_bonus(t_pipex_bonus *p_b, int argc, char **argv, char **env)
 		p_b->cmd_count = 2;
 		init_cmds(p_b, argv + 1);
 	}
-	p_b->all_paths = paths(env);
+	p_b->all_paths = find_paths(env);
 	if (!p_b->all_paths)
 	{
-		free(p_b->cmd);
+		/*free(p_b->cmd);
 		close(p_b->fd_infile);
 		close(p_b->fd_outfile);
-		exit (-1);
+		exit (1);*/
 	}
 	p_b->status_code = 0;
 }

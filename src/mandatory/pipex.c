@@ -19,7 +19,7 @@ void	command_in(t_pipex *p, char **env, int *pipe_fd)
 
 	cmd = ft_split(p->cmd1, ' ');
 	if (!cmd)
-		exit(-1);
+		exit(1);
 	cmd_path = find_command_path(cmd[0], p->all_paths);
 	close(pipe_fd[0]);
 	dup2(p->fd_infile, STDIN_FILENO);
@@ -42,7 +42,7 @@ void	command_out(t_pipex *p, char **env, int *pipe_fd)
 
 	cmd = ft_split(p->cmd2, ' ');
 	if (!cmd)
-		exit(-1);
+		exit(1);
 	cmd_path = find_command_path(cmd[0], p->all_paths);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
@@ -58,10 +58,15 @@ void	command_out(t_pipex *p, char **env, int *pipe_fd)
 	exit(127);
 }
 
-void	wait_for_all_process(void)
+int	wait_for_all_process(void)
 {
-	while (waitpid(-1, NULL, 0) > 0)
+	int status;
+
+	while (waitpid(-1, &status, 0) > 0)
 		;
+	if (WIFEXITED(status))
+		return(WEXITSTATUS(status));
+	return(127);
 }
 
 void	pipex(t_pipex *p, char **env)
@@ -86,5 +91,5 @@ void	pipex(t_pipex *p, char **env)
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	wait_for_all_process();
+	p->status_code = wait_for_all_process();
 }

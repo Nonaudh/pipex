@@ -63,5 +63,6 @@ void	init_pipe_fd(t_pipe *f)
 void	multi_clean_exit(t_pipex_bonus *p_b)
 {
 	free(p_b->cmd);
-	free_the_tab(p_b->all_paths);
+	if (p_b->all_paths)
+		free_the_tab(p_b->all_paths);
 }

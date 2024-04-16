@@ -61,7 +61,7 @@ void	last_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 
 	cmd_tmp = ft_split(p_b->cmd[i], ' ');
 	if (!cmd_tmp)
-		exit(-1);
+		exit(1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(p_b->fd_outfile, STDOUT_FILENO);
@@ -106,6 +106,6 @@ void	multi_pipe(t_pipex_bonus *p_b, char **env)
 			i++;
 	}
 	close_files_and_pipes(p_b, &f);
-	wait_for_all_process();
+	p_b->status_code = wait_for_all_process();
 	free_struct(&f);
 }

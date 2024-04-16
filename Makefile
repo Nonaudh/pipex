@@ -23,7 +23,7 @@ NAME = pipex
 	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
 $(NAME) : $(OBJ) $(OBJ_BONUS) 
-	@$(MAKE) -sC $(LIBFTDIR)
+	$(MAKE) -sC $(LIBFTDIR)
 	@$(CC) $(OBJ) $(OBJ_BONUS) $(INCLUDE) -o $(NAME)
 	@tput setaf 2
 	@echo $(NAME) compiled
@@ -31,14 +31,12 @@ $(NAME) : $(OBJ) $(OBJ_BONUS)
 all : $(NAME)
 
 clean :
-	@rm -f $(OBJ) $(OBJ_BONUS)
-	@$(MAKE) -sC $(LIBFTDIR) clean
-	@echo object files deleted
+	rm -f $(OBJ) $(OBJ_BONUS)
+	$(MAKE) -sC $(LIBFTDIR) clean
 
 fclean : clean
-	@rm -f $(NAME)
-	@$(MAKE) -sC $(LIBFTDIR) fclean
-	@echo executable files deleted
+	rm -f $(NAME)
+	$(MAKE) -sC $(LIBFTDIR) fclean
 
 re: fclean all
 

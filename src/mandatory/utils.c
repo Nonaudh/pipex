@@ -43,10 +43,10 @@ char	*find_command_path(char *cmd, char **paths)
 	char	*dir;
 
 	i = 0;
-	if (!cmd)
-		return (NULL);
+	//if (!cmd)
+		//return (NULL);
 	dir = ft_strjoin("/", cmd);
-	while (paths[i])
+	while (cmd && paths && paths[i])
 	{
 		full_path = ft_strjoin(paths[i], dir);
 		if (!access(full_path, X_OK))
@@ -59,11 +59,12 @@ char	*find_command_path(char *cmd, char **paths)
 	}
 	ft_putstr_fd(cmd, 2);
 	ft_putendl_fd(": command not found", 2);
-	free(dir);
+	if (dir)
+		free(dir);
 	return (NULL);
 }
 
-char	**paths(char **env)
+char	**find_paths(char **env)
 {
 	int	i;
 
@@ -77,7 +78,8 @@ char	**paths(char **env)
 
 void	clean_struct(t_pipex *p)
 {
-	free_the_tab(p->all_paths);
+	if (p->all_paths)
+		free_the_tab(p->all_paths);
 	if (p->fd_infile != -1)
 		close(p->fd_infile);
 	if (p->fd_outfile != -1)	
