@@ -29,7 +29,9 @@ void	free_struct(t_pipe *f)
 
 void	close_files_and_pipes(t_pipex_bonus *p_b, t_pipe *f)
 {
-	close(p_b->fd_infile);
-	close(p_b->fd_outfile);
+	if (p_b->fd_infile != -1)
+		close(p_b->fd_infile);
+	if (p_b->fd_outfile != -1)	
+		close(p_b->fd_outfile);
 	close_all_pipe(f, p_b->cmd_count - 1);
 }

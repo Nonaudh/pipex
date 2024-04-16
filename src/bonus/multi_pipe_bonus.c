@@ -19,12 +19,12 @@ void	first_command(t_pipex_bonus *p_b, t_pipe *f, char **env)
 
 	cmd_tmp = ft_split(p_b->cmd[0], ' ');
 	if (!cmd_tmp)
-		exit(-1);
+		exit(1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
 	dup2(p_b->fd_infile, STDIN_FILENO);
 	dup2(f->pipe_fd[0][1], STDOUT_FILENO);
 	close_files_and_pipes(p_b, f);
-	if (cmd_path && p_b->fd_infile)
+	if (cmd_path && p_b->fd_infile != -1)
 		execve(cmd_path, cmd_tmp, env);
 	multi_clean_exit(p_b);
 	free_struct(f);
@@ -40,7 +40,7 @@ void	middle_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 
 	cmd_tmp = ft_split(p_b->cmd[i], ' ');
 	if (!cmd_tmp)
-		exit(-1);
+		exit(1);
 	cmd_path = find_command_path(cmd_tmp[0], p_b->all_paths);
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(f->pipe_fd[i][1], STDOUT_FILENO);
@@ -66,7 +66,7 @@ void	last_command(t_pipex_bonus *p_b, t_pipe *f, char **env, int i)
 	dup2(f->pipe_fd[i - 1][0], STDIN_FILENO);
 	dup2(p_b->fd_outfile, STDOUT_FILENO);
 	close_files_and_pipes(p_b, f);
-	if (cmd_path)
+	if (cmd_path && p_b->fd_outfile != -1)
 		execve(cmd_path, cmd_tmp, env);
 	multi_clean_exit(p_b);
 	free_struct(f);

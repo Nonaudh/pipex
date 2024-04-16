@@ -18,7 +18,7 @@ void	write_here_doc(char **argv)
 	int		fd_hd;
 
 	fd_hd = open("/tmp/here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	if (!fd_hd)
+	if (fd_hd == -1)
 		exit(1);
 	ft_putstr_fd("> ", 0);
 	hd = get_next_line(0);
@@ -36,19 +36,11 @@ void	write_here_doc(char **argv)
 
 void	open_infile_bonus(t_pipex_bonus *p_b, char *infile)
 {
-	if (access(infile, R_OK))
-	{
+	p_b->fd_infile = open(infile, O_RDONLY);
+	if (p_b->fd_infile == -1)
 		perror(infile);
-		p_b->fd_infile = 0;
-	}
-	else
-	{
-		p_b->fd_infile = open(infile, O_RDONLY);
-		if (p_b->fd_infile == -1)
-			exit(1);
-		if (p_b->here_doc)
-			unlink(infile);
-	}
+	if (p_b->here_doc)
+		unlink(infile);
 }
 
 void	open_outfile_bonus(t_pipex_bonus *p_b, char *outfile)
@@ -58,11 +50,7 @@ void	open_outfile_bonus(t_pipex_bonus *p_b, char *outfile)
 	else
 		p_b->fd_outfile = open(outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (p_b->fd_outfile == -1)
-	{
 		perror(outfile);
-		close(p_b->fd_infile);
-		exit(1);
-	}
 }
 
 void	open_bonus_files(t_pipex_bonus *p_b, int argc, char **argv)

@@ -14,29 +14,16 @@
 
 void	open_infile(t_pipex *p, char *infile)
 {
-	if (access(infile, R_OK))
-	{
+	p->fd_infile = open(infile, O_RDONLY);
+	if (p->fd_infile == -1)
 		perror(infile);
-		p->fd_infile = -1;
-		//exit(1);
-	}
-	else
-	{
-		p->fd_infile = open(infile, O_RDONLY);
-		if (p->fd_infile == -1)
-			exit(1);
-	}
 }
 
 void	open_outfile(t_pipex *p, char *outfile)
 {
 	p->fd_outfile = open(outfile, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (p->fd_outfile == -1)
-	{
 		perror(outfile);
-		close(p->fd_infile);
-		exit(1);
-	}
 }
 
 void	open_files(t_pipex *p, char **argv)

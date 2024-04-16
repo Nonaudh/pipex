@@ -50,7 +50,7 @@ void	command_out(t_pipex *p, char **env, int *pipe_fd)
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	clean_struct(p);
-	if (cmd_path)
+	if (cmd_path && p->fd_outfile != -1)
 		execve(cmd_path, cmd, env);
 	close(pipe_fd[0]);
 	free_the_tab(cmd);

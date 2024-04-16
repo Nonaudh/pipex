@@ -78,6 +78,8 @@ char	**paths(char **env)
 void	clean_struct(t_pipex *p)
 {
 	free_the_tab(p->all_paths);
-	close(p->fd_infile);
-	close(p->fd_outfile);
+	if (p->fd_infile != -1)
+		close(p->fd_infile);
+	if (p->fd_outfile != -1)	
+		close(p->fd_outfile);
 }
