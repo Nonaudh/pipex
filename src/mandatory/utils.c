@@ -43,8 +43,6 @@ char	*find_command_path(char *cmd, char **paths)
 	char	*dir;
 
 	i = 0;
-	//if (!cmd)
-		//return (NULL);
 	dir = ft_strjoin("/", cmd);
 	while (cmd && paths && paths[i])
 	{
@@ -82,6 +80,6 @@ void	clean_struct(t_pipex *p)
 		free_the_tab(p->all_paths);
 	if (p->fd_infile != -1)
 		close(p->fd_infile);
-	if (p->fd_outfile != -1)	
+	if (p->fd_outfile != -1)
 		close(p->fd_outfile);
 }

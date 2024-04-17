@@ -31,7 +31,7 @@ void	close_files_and_pipes(t_pipex_bonus *p_b, t_pipe *f)
 {
 	if (p_b->fd_infile != -1)
 		close(p_b->fd_infile);
-	if (p_b->fd_outfile != -1)	
+	if (p_b->fd_outfile != -1)
 		close(p_b->fd_outfile);
 	close_all_pipe(f, p_b->cmd_count - 1);
 }

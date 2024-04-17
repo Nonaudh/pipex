@@ -60,13 +60,13 @@ void	command_out(t_pipex *p, char **env, int *pipe_fd)
 
 int	wait_for_all_process(void)
 {
-	int status;
+	int	status;
 
 	while (waitpid(-1, &status, 0) > 0)
 		;
 	if (WIFEXITED(status))
-		return(WEXITSTATUS(status));
-	return(127);
+		return (WEXITSTATUS(status));
+	return (127);
 }
 
 void	pipex(t_pipex *p, char **env)
